@@ -1,0 +1,22 @@
+{% load static %}
+<!doctype html>
+<html lang="uk">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>{% if resume %}Редагувати{% else %}Створити{% endif %} резюме</title><link rel="stylesheet" href="{% static 'resume/styles.css' %}"><link rel="stylesheet" href="{% static 'resume/themes.css' %}"></head>
+<body>
+  <header class="topbar"><a class="brand" href="{% url 'home' %}"><span class="brand-mark">r.</span><span>резюме<span class="brand-dot">.</span></span></a><a class="btn btn-quiet" href="{% url 'profile' %}">До кабінету</a></header>
+  <main class="wrap editor-wrap"><div class="eyebrow">{% if resume %}Редагування резюме{% else %}Нове резюме · {{ template_name }}{% endif %}</div><h1 class="editor-title">Заповни своє резюме</h1>
+    {% for message in messages %}<p class="form-success">{{ message }}</p>{% endfor %}
+    <section class="editor-card"><form method="post">{% csrf_token %}
+      {% for field in form %}<label class="form-field">{{ field.label }}{{ field }}{% for error in field.errors %}<small class="field-error">{{ error }}</small>{% endfor %}</label>{% endfor %}
+      {% for error in form.non_field_errors %}<p class="field-error">{{ error }}</p>{% endfor %}
+      <button class="btn btn-primary" type="submit">Зберегти та переглянути <span>↗</span></button>
+      {% if resume %}<a class="btn btn-quiet" href="{% url 'resume_preview' resume.pk %}">Переглянути без змін</a>{% endif %}
+    </form></section>
+    {% if resume %}<section class="projects-editor"><div class="section-heading"><div><div class="eyebrow">Портфоліо</div><h2>Проєкти</h2></div><a class="btn btn-dark" href="{% url 'project_add' resume.pk %}">Додати проєкт <span>+</span></a></div>
+      {% for project in projects %}<article class="project-edit-card"><div><h3>{{ project.title }}</h3><p>{{ project.description|default:project.technologies }}</p></div><form method="post" action="{% url 'project_delete' project.pk %}">{% csrf_token %}<button class="btn btn-quiet" type="submit">Видалити проєкт</button></form>
+        {% for attachment in project.attachments.all %}<div class="attachment-row"><a href="{% url 'attachment_download' attachment.pk %}">{{ attachment.original_name }}</a><form method="post" enctype="multipart/form-data" action="{% url 'attachment_replace' attachment.pk %}">{% csrf_token %}<input type="file" name="file" required><button class="link-button" type="submit">Замінити</button></form><form method="post" action="{% url 'attachment_delete' attachment.pk %}">{% csrf_token %}<button class="link-button" type="submit">Видалити файл</button></form></div>{% endfor %}
+      </article>{% empty %}<p class="muted-copy">Додайте проєкти, щоб показати приклади робіт.</p>{% endfor %}
+    </section>{% endif %}
+  </main>
+</body>
+</html>

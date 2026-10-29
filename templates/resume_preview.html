@@ -1,0 +1,16 @@
+{% load static %}
+<!doctype html>
+<html lang="uk">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{{ resume.full_name }} — резюме</title>
+  <link rel="stylesheet" href="{% static 'resume/styles.css' %}"><link rel="stylesheet" href="{% static 'resume/themes.css' %}">
+</head>
+<body class="resume-page">
+  <header class="topbar resume-toolbar">
+    <a class="brand" href="{% url 'profile' %}"><span class="brand-mark">r.</span><span>резюме<span class="brand-dot">.</span></span></a>
+    <div class="toolbar-actions"><a class="btn btn-quiet" href="{% url 'profile' %}">До кабінету</a><a class="btn btn-dark" href="{% url 'resume_edit' resume.pk %}">Редагувати резюме</a><button class="btn btn-primary" type="button" onclick="window.print()">Друк / PDF</button></div>
+  </header>
+  <main class="resume-preview resume-theme-{{ resume.template }}">{% include theme_template %}</main>
+</body>
+</html>

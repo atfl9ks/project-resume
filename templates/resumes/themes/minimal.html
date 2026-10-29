@@ -1,0 +1,8 @@
+<article class="cv cv-minimal">
+  <header class="minimal-header"><h1>{{ resume.full_name }}</h1><p class="cv-position">{{ resume.position }}</p><p class="minimal-contact">{{ resume.email }}{% if resume.phone %} · {{ resume.phone }}{% endif %}{% if resume.location %} · {{ resume.location }}{% endif %}</p></header>
+  {% if resume.summary %}<section class="cv-section"><h2>Про мене</h2><div>{{ resume.summary|linebreaksbr }}</div></section>{% endif %}
+  {% if resume.experience %}<section class="cv-section"><h2>Досвід</h2><div>{{ resume.experience|linebreaksbr }}</div></section>{% endif %}
+  {% if resume.education %}<section class="cv-section"><h2>Освіта</h2><div>{{ resume.education|linebreaksbr }}</div></section>{% endif %}
+  {% if resume.skills %}<section class="cv-section"><h2>Ключові навички</h2><div>{{ resume.skills|linebreaksbr }}</div></section>{% endif %}
+  {% include "resumes/themes/_projects.html" %}
+</article>

@@ -1,0 +1,15 @@
+{% load static %}
+<!doctype html>
+<html lang="uk">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Мій кабінет — Резюме</title><link rel="stylesheet" href="{% static 'resume/styles.css' %}"><link rel="stylesheet" href="{% static 'resume/themes.css' %}"></head>
+<body>
+  <header class="topbar"><a class="brand" href="{% url 'home' %}"><span class="brand-mark">r.</span><span>резюме<span class="brand-dot">.</span></span></a><form action="{% url 'logout' %}" method="post">{% csrf_token %}<button class="btn btn-dark" type="submit">Вийти</button></form></header>
+  <main class="wrap editor-wrap"><div class="eyebrow">Особистий кабінет</div><h1 class="editor-title">Привіт, {{ user.display_name|default:user.username }}!</h1>
+    {% for message in messages %}<p class="form-success">{{ message }}</p>{% endfor %}
+    <section class="projects-editor"><div class="section-heading"><div><div class="eyebrow">Твоя кар’єра</div><h2>Мої резюме</h2></div><a href="{% url 'home' %}#templates" class="btn btn-primary">Створити резюме <span>↗</span></a></div>
+      <div class="resume-list">{% for resume in resumes %}<article class="resume-list-card"><div><h3>{{ resume.full_name }}</h3><p>{{ resume.position }} · {{ resume.get_template_display }}</p><small>Оновлено {{ resume.updated_at|date:"d.m.Y H:i" }}</small></div><div class="toolbar-actions"><a class="btn btn-quiet" href="{% url 'resume_edit' resume.pk %}">Редагувати</a><a class="btn btn-dark" href="{% url 'resume_preview' resume.pk %}">Переглянути</a></div></article>{% empty %}<p class="muted-copy">Поки що резюме немає. Оберіть шаблон, щоб створити перше.</p>{% endfor %}</div>
+    </section>
+    <section class="editor-card profile-card"><h2>Мій профіль</h2><form method="post">{% csrf_token %}{% for field in form %}<label class="form-field">{{ field.label }}{{ field }}{% for error in field.errors %}<small class="field-error">{{ error }}</small>{% endfor %}</label>{% endfor %}<button class="btn btn-primary" type="submit">Зберегти зміни</button></form></section>
+  </main>
+</body>
+</html>
