@@ -121,6 +121,7 @@ class ProfileForm(forms.ModelForm):
 class ResumeForm(forms.ModelForm):
     template = forms.ChoiceField(label="Шаблон резюме", choices=Resume.TEMPLATE_CHOICES, required=True)
     education_level = forms.ChoiceField(label="Рівень освіти", choices=[("", "Оберіть рівень"), *Resume.EDUCATION_CHOICES], required=False)
+    experience_level = forms.ChoiceField(label="Досвід роботи", choices=[("", "Не вказувати"), *Resume.EXPERIENCE_CHOICES], required=False)
     work_format = forms.ChoiceField(label="Бажаний формат роботи", choices=[("", "Не вказувати"), *Resume.WORK_FORMAT_CHOICES], required=False)
     employment_type = forms.ChoiceField(label="Тип зайнятості", choices=[("", "Не вказувати"), *Resume.EMPLOYMENT_CHOICES], required=False)
     seniority = forms.ChoiceField(label="Бажаний рівень посади", choices=[("", "Не вказувати"), *Resume.LEVEL_CHOICES], required=False)
@@ -135,13 +136,13 @@ class ResumeForm(forms.ModelForm):
 
     class Meta:
         model = Resume
-        fields = ["template", "full_name", "email", "phone", "location", "position", "summary"]
+        fields = ["template", "full_name", "email", "phone", "location", "position", "summary", "experience", "education", "skills"]
         labels = {"full_name": "Ім’я та прізвище", "email": "Електронна пошта", "phone": "Телефон", "location": "Місто", "position": "Бажана посада", "summary": "Професійний профіль — кілька речень про ваш досвід і цілі"}
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         details = (self.instance.resume_details or {}) if self.instance and self.instance.pk else {}
-        for key in ("work_format", "employment_type", "seniority", "salary_expectation", "travel_ready", "relocation_ready", "driving_license"):
+        for key in ("experience_level", "work_format", "employment_type", "seniority", "salary_expectation", "travel_ready", "relocation_ready", "driving_license"):
             self.fields[key].initial = details.get(key, False if key in {"travel_ready", "relocation_ready", "driving_license"} else "")
         self.fields["education_level"].initial = details.get("education_level", "")
         records = {"education_records": details.get("education_records", []), "experience_records": self.instance.experience_records or [] if self.instance and self.instance.pk else [], "language_records": details.get("language_records", []), "skill_records": details.get("skill_records", [])}
@@ -149,18 +150,33 @@ class ResumeForm(forms.ModelForm):
 
     def clean(self):
         data = super().clean()
-        for key in ("education_records", "experience_records", "language_records", "skill_records"):
-            try: rows = json.loads(self.data.get(key) or "[]")
-            except (TypeError, ValueError): raise forms.ValidationError("Проверьте записи в повторяющихся разделах.")
+        record_fields = {
+            "education_records": ("level", "school", "major", "years", "status"),
+            "experience_records": ("position", "company", "years", "description"),
+            "language_records": ("language", "level"),
+            "skill_records": ("category", "skill", "level"),
+        }
+        for key, columns in record_fields.items():
+            raw = self.data.get(key) or "[]"
+            try:
+                rows = json.loads(raw)
+            except (TypeError, ValueError):
+                # Accept the older one-record-per-line text format as well as
+                # the JSON used by the structured editor.
+                rows = []
+                for line in str(raw).splitlines():
+                    values = [part.strip() for part in line.split("|")]
+                    if any(values):
+                        rows.append({column: value for column, value in zip(columns, values) if value})
             if not isinstance(rows, list) or any(not isinstance(row, dict) for row in rows):
-                raise forms.ValidationError("Формат записей резюме некорректен.")
+                raise forms.ValidationError("Формат записів резюме некоректен.")
             data[key] = rows
         return data
 
     def save(self, commit=True):
         resume = super().save(commit=False)
         details = {}
-        for key in ("education_level", "work_format", "employment_type", "seniority", "salary_expectation", "travel_ready", "relocation_ready", "driving_license"):
+        for key in ("education_level", "experience_level", "work_format", "employment_type", "seniority", "salary_expectation", "travel_ready", "relocation_ready", "driving_license"):
             details[key] = self.cleaned_data.get(key)
         for key in ("education_records", "language_records", "skill_records"): details[key] = self.cleaned_data.get(key, [])
         resume.experience_records = self.cleaned_data.get("experience_records", [])

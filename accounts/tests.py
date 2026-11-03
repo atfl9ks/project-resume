@@ -15,6 +15,11 @@ from .forms import ResumeForm
 
 
 class AccountFlowTests(TestCase):
+    def test_production_health_and_password_reset_pages(self):
+        self.assertEqual(self.client.get(reverse("healthz")).content, b"ok")
+        self.assertEqual(self.client.get(reverse("password_reset")).status_code, 200)
+        self.assertEqual(self.client.get(reverse("password_reset_done")).status_code, 200)
+
     def test_help_page_and_footer_links(self):
         from django.urls import reverse
         home = self.client.get(reverse("home"))
@@ -136,7 +141,7 @@ class AccountFlowTests(TestCase):
         policy = self.client.get(reverse("privacy_policy"))
         self.assertEqual(policy.status_code, 200)
         self.assertContains(policy, "Політика конфіденційності")
-        self.assertContains(policy, "hello@rezume.ua")
+        self.assertContains(policy, "resume2026emailbot@gmail.com")
         self.assertContains(policy, "Законі України")
 
     @override_settings(EMAIL_BACKEND="django.core.mail.backends.locmem.EmailBackend", PUBLIC_BASE_URL="http://testserver")

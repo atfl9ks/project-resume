@@ -13,6 +13,7 @@ from django.core.exceptions import ValidationError
 from django.db import transaction
 from django.http import FileResponse, JsonResponse
 from django.http import Http404
+from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.views.decorators.http import require_POST
 from .forms import EmailLoginForm, PendingEmailChangeForm, PortfolioProjectForm, ProfileForm, RegistrationForm, ResumeForm
@@ -25,6 +26,16 @@ def home(request):
     return render(request, "index.html")
 
 
+def healthz(request):
+    # Railway mounts volumes only on the running service. Fail its deployment
+    # health check when the required persistent upload volume was not attached.
+    import os
+    from django.conf import settings
+    if not settings.DEBUG and os.getenv("RAILWAY_ENVIRONMENT_NAME") and not os.getenv("RAILWAY_VOLUME_MOUNT_PATH"):
+        return HttpResponse("persistent upload volume is not configured", status=503, content_type="text/plain")
+    return HttpResponse("ok", content_type="text/plain")
+
+
 def privacy_policy(request):
     return render(request, "privacy.html")
 
@@ -34,7 +45,7 @@ def help_page(request):
         ("Початок роботи", "Як зареєструватися на сайті?", "Натисніть «Створити резюме», заповніть ім’я, email і пароль та надішліть форму."),
         ("Початок роботи", "Як підтвердити електронну пошту?", "Відкрийте лист і натисніть посилання підтвердження. Воно дійсне 24 години. Перевірте папку «Спам» або повторно надішліть лист."),
         ("Початок роботи", "Як увійти в особистий кабінет?", "Натисніть «Увійти» та введіть зареєстровані email і пароль. Спершу потрібно підтвердити адресу."),
-        ("Початок роботи", "Як відновити пароль?", "Автоматичне відновлення наразі недоступне. Зверніться до підтримки з адреси, прив’язаної до акаунта."),
+        ("Початок роботи", "Як відновити пароль?", "На сторінці входу натисніть «Забули пароль?», введіть email акаунта й перейдіть за посиланням у листі. Посилання працює обмежений час."),
         ("Створення резюме", "Як створити нове резюме?", "На головній оберіть шаблон і натисніть «Створити з цим шаблоном». Увійдіть або зареєструйтеся, якщо з’явиться запит."),
         ("Створення резюме", "Як правильно заповнити інформацію?", "Укажіть актуальні контакти, бажану посаду та короткий профіль. Опишіть завдання, власні дії й результати. Необов’язкові поля можна пропустити."),
         ("Створення резюме", "Як додати освіту?", "У блоці «Освіта» додайте запис із рівнем, закладом, спеціальністю, роками та статусом."),

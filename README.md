@@ -30,6 +30,27 @@
 
 5. Сайт: http://127.0.0.1:8000/ . Django Admin: http://127.0.0.1:8000/admin/ .
 
+## Production на Railway
+
+Проєкт підготовлено до Railway: Railpack визначає Python за `requirements.txt` та `.python-version`, а `Procfile` запускає Gunicorn на Railway `$PORT`. У Railway Dashboard один раз задайте команду збірки `DEBUG=False python manage.py collectstatic --no-input`, pre-deploy команду `python manage.py migrate --noinput` і health check `/healthz/`. Статичні файли віддає WhiteNoise. Локальна розробка лишається на SQLite; production без PostgreSQL не перемикається непомітно на тимчасову SQLite.
+
+1. Надішліть проєкт у власний GitHub-репозиторій, потім у Railway створіть **New Project → Deploy from GitHub Repo** і виберіть цей репозиторій. Push автоматично не виконується.
+2. У Railway додайте PostgreSQL через **New → Database → PostgreSQL**. У змінних Django-сервісу створіть `DATABASE_URL` як посилання `${{Postgres.DATABASE_URL}}` (ім’я `Postgres` замініть на фактичну назву сервісу бази). Код також підтримує Railway `PGHOST`, `PGPORT`, `PGUSER`, `PGPASSWORD`, `PGDATABASE`, якщо ви прив’яжете їх до web-сервісу.
+3. Створіть постійний **Volume**, прив’яжіть до web-сервісу та встановіть mount path `/app/media`. Railway передасть `RAILWAY_VOLUME_MOUNT_PATH`; він використовується як `MEDIA_ROOT`. Перевірка `/healthz/` не пройде, якщо volume не підключений. Аватари віддаються з цього сховища, а вкладення портфоліо залишаються за авторизованим download-обробником.
+4. У **Settings → Networking** натисніть **Generate Domain**. Railway задає `RAILWAY_PUBLIC_DOMAIN`; з нього автоматично формуються дозволений host, CSRF origin і HTTPS-посилання підтвердження email. Для власного домену додайте його в `ALLOWED_HOSTS` (тільки домен, без схеми) та `CSRF_TRUSTED_ORIGINS` (повний `https://...`).
+5. У **Variables** задайте `SECRET_KEY` (випадковий секрет; створіть локально командою знизу), `DEBUG=False`, `EMAIL_HOST_USER`, Gmail App Password у `EMAIL_HOST_PASSWORD`, і цей самий поштовий акаунт у `DEFAULT_FROM_EMAIL`. SMTP host/port/TLS уже мають Gmail defaults. Не вставляйте ці секрети в GitHub і не надсилайте їх у чат.
+6. Після першого deployment перевірте `/healthz/`, реальне отримання листа активації, повторну відправку, завантаження аватара/вкладення та PDF. SMTP не можна підтвердити без справжніх поштових реквізитів.
+
+Секрет для Railway можна створити локально без публікації в репозиторії:
+
+```powershell
+python -c "from django.core.management.utils import get_random_secret_key; print(get_random_secret_key())"
+```
+
+Для production потрібні активна підписка/кредити Railway. Поточний Hobby має $5 мінімального місячного usage з $5 кредиту, а Free має $1/місяць після пробного періоду; ресурси тарифікуються за фактичним використанням. Обсяг volume у плані Hobby включає до 5 GB. Актуальні тарифи й ціни окремих ресурсів перевіряйте перед створенням сервісів у [Railway Pricing](https://railway.com/pricing). Railway volume не є спільним сховищем для кількох реплік і має бути резервно скопійований. Для цього застосунку почніть з однієї web-репліки; масштабування потребуватиме object storage для media-файлів.
+
+`render.yaml` залишено як наявну конфігурацію для Render. Для нового Railway-сервісу використовується `Procfile` і команди з кроку вище; `railway.toml` не застосовується до нових сервісів у поточній системі Railway.
+
 ## Работа с резюме
 
 - В каталоге выберите Classic, Modern, Minimal или Developer.

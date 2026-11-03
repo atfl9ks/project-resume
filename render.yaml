@@ -1,0 +1,52 @@
+services:
+  - type: web
+    name: resume-builder
+    runtime: python
+    plan: starter
+    buildCommand: pip install -r requirements.txt && python manage.py collectstatic --no-input
+    preDeployCommand: python manage.py migrate --noinput
+    startCommand: gunicorn resume_builder.wsgi:application --workers 2 --timeout 120 --bind 0.0.0.0:$PORT
+    healthCheckPath: /healthz/
+    disk:
+      name: user-uploads
+      mountPath: /var/data
+      sizeGB: 1
+    envVars:
+      - key: DEBUG
+        value: "False"
+      - key: SECRET_KEY
+        generateValue: true
+      - key: DATABASE_URL
+        fromDatabase:
+          name: resume-builder-db
+          property: connectionString
+      - key: MEDIA_ROOT
+        value: /var/data/media
+      - key: ALLOWED_HOSTS
+        value: .onrender.com
+      - key: SECURE_SSL_REDIRECT
+        value: "True"
+      - key: EMAIL_BACKEND
+        value: django.core.mail.backends.smtp.EmailBackend
+      - key: EMAIL_HOST
+        value: smtp.gmail.com
+      - key: EMAIL_PORT
+        value: "587"
+      - key: EMAIL_USE_TLS
+        value: "True"
+      - key: EMAIL_USE_SSL
+        value: "False"
+      - key: EMAIL_HOST_USER
+        sync: false
+      - key: EMAIL_HOST_PASSWORD
+        sync: false
+      - key: DEFAULT_FROM_EMAIL
+        sync: false
+
+databases:
+  - name: resume-builder-db
+    plan: basic-256mb
+    databaseName: resume_builder
+    user: resume_builder
+    region: frankfurt
+    diskSizeGB: 1
