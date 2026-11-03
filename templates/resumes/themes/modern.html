@@ -5,12 +5,12 @@
     <h1>{{ resume.full_name }}</h1>
     {% if resume.position %}<p class="cv-position">{{ resume.position }}</p>{% endif %}
     <section class="modern-contact"><h2>Contact</h2><a href="mailto:{{ resume.email }}">{{ resume.email }}</a>{% if resume.phone %}<span>{{ resume.phone }}</span>{% endif %}{% if resume.location %}<span>{{ resume.location }}</span>{% endif %}</section>
-    {% if resume.skills %}<section class="modern-rail-section"><h2>Skills</h2><div>{{ resume.skills|linebreaksbr }}</div></section>{% endif %}
-    {% if resume.education %}<section class="modern-rail-section"><h2>Education</h2><div>{{ resume.education|linebreaksbr }}</div></section>{% endif %}
+    {% with d=resume.resume_details %}{% if d.skill_records or resume.skills %}<section class="modern-rail-section"><h2>Skills</h2><div>{% if d.skill_records %}{% for row in d.skill_records %}<p>{{ row.skill }}{% if row.level %} · {{ row.level }}{% endif %}</p>{% endfor %}{% else %}{{ resume.skills|linebreaksbr }}{% endif %}</div></section>{% endif %}
+    {% if d.education_records or resume.education %}<section class="modern-rail-section"><h2>Education</h2><div>{% if d.education_records %}{% for row in d.education_records %}<p>{% if row.level %}<strong>{{ row.level }}</strong>{% endif %}{% if row.school %} · {{ row.school }}{% endif %}{% if row.major %} · {{ row.major }}{% endif %}{% if row.years %} · {{ row.years }}{% endif %}</p>{% endfor %}{% else %}{{ resume.education|linebreaksbr }}{% endif %}</div></section>{% endif %}{% endwith %}
   </aside>
   <div class="modern-main">
     {% if resume.summary %}<section class="modern-feature"><span class="modern-index">01</span><div><h2>About</h2><p>{{ resume.summary|linebreaksbr }}</p></div></section>{% endif %}
-    {% if resume.experience %}<section class="modern-feature"><span class="modern-index">02</span><div><h2>Experience</h2><p>{{ resume.experience|linebreaksbr }}</p></div></section>{% endif %}
+    {% if resume.experience_records or resume.experience %}<section class="modern-feature"><span class="modern-index">02</span><div><h2>Experience</h2>{% if resume.experience_records %}{% for row in resume.experience_records %}<p><strong>{{ row.position }}</strong>{% if row.company %} · {{ row.company }}{% endif %}{% if row.years %} · {{ row.years }}{% endif %}{% if row.description %}<br>{{ row.description|linebreaksbr }}{% endif %}</p>{% endfor %}{% else %}<p>{{ resume.experience|linebreaksbr }}</p>{% endif %}</div></section>{% endif %}
     {% include "resumes/themes/_projects.html" %}
     {% include "resumes/themes/_details.html" %}
   </div>

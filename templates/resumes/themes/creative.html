@@ -10,13 +10,13 @@
   <div class="creative-body">
     <div class="creative-main">
       {% if resume.summary %}<section class="creative-block creative-about"><span class="creative-tag">01 / HELLO</span><h2>A point of view</h2><p>{{ resume.summary|linebreaksbr }}</p></section>{% endif %}
-      {% if resume.experience %}<section class="creative-block"><span class="creative-tag">02 / THE JOURNEY</span><h2>Experience</h2><p>{{ resume.experience|linebreaksbr }}</p></section>{% endif %}
+      {% if resume.experience_records or resume.experience %}<section class="creative-block"><span class="creative-tag">02 / THE JOURNEY</span><h2>Experience</h2>{% if resume.experience_records %}{% for row in resume.experience_records %}<p><strong>{{ row.position }}</strong>{% if row.company %} · {{ row.company }}{% endif %}{% if row.years %} · {{ row.years }}{% endif %}{% if row.description %}<br>{{ row.description|linebreaksbr }}{% endif %}</p>{% endfor %}{% else %}<p>{{ resume.experience|linebreaksbr }}</p>{% endif %}</section>{% endif %}
       {% include "resumes/themes/_projects.html" %}
       {% include "resumes/themes/_details.html" %}
     </div>
     <aside class="creative-aside">
-      {% if resume.skills %}<section class="creative-block"><span class="creative-tag">03 / TOOLKIT</span><h2>Things I do</h2><div>{{ resume.skills|linebreaksbr }}</div></section>{% endif %}
-      {% if resume.education %}<section class="creative-block"><span class="creative-tag">04 / ROOTS</span><h2>Learning</h2><div>{{ resume.education|linebreaksbr }}</div></section>{% endif %}
+      {% with d=resume.resume_details %}{% if d.skill_records or resume.skills %}<section class="creative-block"><span class="creative-tag">03 / TOOLKIT</span><h2>Things I do</h2><div>{% if d.skill_records %}{% for row in d.skill_records %}<p>{{ row.skill }}{% if row.category %} · {{ row.category }}{% endif %}{% if row.level %} · {{ row.level }}{% endif %}</p>{% endfor %}{% else %}{{ resume.skills|linebreaksbr }}{% endif %}</div></section>{% endif %}
+      {% if d.education_records or resume.education %}<section class="creative-block"><span class="creative-tag">04 / ROOTS</span><h2>Learning</h2><div>{% if d.education_records %}{% for row in d.education_records %}<p>{% if row.level %}<strong>{{ row.level }}</strong>{% endif %}{% if row.school %} · {{ row.school }}{% endif %}{% if row.major %} · {{ row.major }}{% endif %}{% if row.years %} · {{ row.years }}{% endif %}</p>{% endfor %}{% else %}{{ resume.education|linebreaksbr }}{% endif %}</div></section>{% endif %}{% endwith %}
       <span class="creative-stamp" aria-hidden="true">MAKE<br>GOOD<br>THINGS</span>
     </aside>
   </div>

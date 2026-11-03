@@ -120,8 +120,13 @@ class ProfileForm(forms.ModelForm):
 
 class ResumeForm(forms.ModelForm):
     template = forms.ChoiceField(label="Шаблон резюме", choices=Resume.TEMPLATE_CHOICES, required=True)
-    education_level = forms.ChoiceField(label="Рівень освіти", choices=[("", "Оберіть рівень"), *Resume.EDUCATION_CHOICES], required=False)
-    experience_level = forms.ChoiceField(label="Досвід роботи", choices=[("", "Не вказувати"), *Resume.EXPERIENCE_CHOICES], required=False)
+    # Keep the legacy scalar fields available to old clients and existing data,
+    # but expose education/experience/skills through the structured editors.
+    education = forms.CharField(required=False, widget=forms.HiddenInput)
+    experience = forms.CharField(required=False, widget=forms.HiddenInput)
+    skills = forms.CharField(required=False, widget=forms.HiddenInput)
+    education_level = forms.CharField(required=False, widget=forms.HiddenInput)
+    experience_level = forms.ChoiceField(label="Загальний стаж", choices=[("", "Не вказувати"), *Resume.EXPERIENCE_CHOICES], required=False)
     work_format = forms.ChoiceField(label="Бажаний формат роботи", choices=[("", "Не вказувати"), *Resume.WORK_FORMAT_CHOICES], required=False)
     employment_type = forms.ChoiceField(label="Тип зайнятості", choices=[("", "Не вказувати"), *Resume.EMPLOYMENT_CHOICES], required=False)
     seniority = forms.ChoiceField(label="Бажаний рівень посади", choices=[("", "Не вказувати"), *Resume.LEVEL_CHOICES], required=False)
@@ -136,7 +141,7 @@ class ResumeForm(forms.ModelForm):
 
     class Meta:
         model = Resume
-        fields = ["template", "full_name", "email", "phone", "location", "position", "summary", "experience", "education", "skills"]
+        fields = ["template", "full_name", "email", "phone", "location", "position", "summary"]
         labels = {"full_name": "Ім’я та прізвище", "email": "Електронна пошта", "phone": "Телефон", "location": "Місто", "position": "Бажана посада", "summary": "Професійний профіль — кілька речень про ваш досвід і цілі"}
 
     def __init__(self, *args, **kwargs):
@@ -144,8 +149,20 @@ class ResumeForm(forms.ModelForm):
         details = (self.instance.resume_details or {}) if self.instance and self.instance.pk else {}
         for key in ("experience_level", "work_format", "employment_type", "seniority", "salary_expectation", "travel_ready", "relocation_ready", "driving_license"):
             self.fields[key].initial = details.get(key, False if key in {"travel_ready", "relocation_ready", "driving_license"} else "")
+        education_records = details.get("education_records", [])
+        if not education_records:
+            legacy_level = details.get("education_level", "")
+            legacy_education = self.instance.education if self.instance and self.instance.pk else ""
+            if legacy_level or legacy_education:
+                education_records = [{"level": legacy_level or legacy_education}]
+        experience_records = self.instance.experience_records or [] if self.instance and self.instance.pk else []
+        if not experience_records and self.instance and self.instance.pk and self.instance.experience:
+            experience_records = [{"description": self.instance.experience}]
+        skill_records = details.get("skill_records", [])
+        if not skill_records and self.instance and self.instance.pk and self.instance.skills:
+            skill_records = [{"skill": line.strip()} for line in self.instance.skills.splitlines() if line.strip()]
         self.fields["education_level"].initial = details.get("education_level", "")
-        records = {"education_records": details.get("education_records", []), "experience_records": self.instance.experience_records or [] if self.instance and self.instance.pk else [], "language_records": details.get("language_records", []), "skill_records": details.get("skill_records", [])}
+        records = {"education_records": education_records, "experience_records": experience_records, "language_records": details.get("language_records", []), "skill_records": skill_records}
         for key, value in records.items(): self.fields[key].initial = json.dumps(value, ensure_ascii=False)
 
     def clean(self):
@@ -175,11 +192,25 @@ class ResumeForm(forms.ModelForm):
 
     def save(self, commit=True):
         resume = super().save(commit=False)
+        # Preserve values submitted by older clients that still post the scalar fields.
+        resume.education = self.cleaned_data.get("education", resume.education)
+        resume.experience = self.cleaned_data.get("experience", resume.experience)
+        resume.skills = self.cleaned_data.get("skills", resume.skills)
         details = {}
         for key in ("education_level", "experience_level", "work_format", "employment_type", "seniority", "salary_expectation", "travel_ready", "relocation_ready", "driving_license"):
             details[key] = self.cleaned_data.get(key)
+        education_records = self.cleaned_data.get("education_records", [])
+        experience_records = self.cleaned_data.get("experience_records", [])
+        skill_records = self.cleaned_data.get("skill_records", [])
         for key in ("education_records", "language_records", "skill_records"): details[key] = self.cleaned_data.get(key, [])
-        resume.experience_records = self.cleaned_data.get("experience_records", [])
+        if education_records:
+            details["education_level"] = next((row.get("level", "") for row in education_records if row.get("level")), "")
+            resume.education = "\n".join(" · ".join(str(row.get(part, "")).strip() for part in ("level", "school", "major", "years", "status") if row.get(part)) for row in education_records)
+        if experience_records:
+            resume.experience = "\n\n".join(" · ".join(str(row.get(part, "")).strip() for part in ("position", "company", "years", "description") if row.get(part)) for row in experience_records)
+        if skill_records:
+            resume.skills = "\n".join(" · ".join(str(row.get(part, "")).strip() for part in ("skill", "category", "level") if row.get(part)) for row in skill_records)
+        resume.experience_records = experience_records
         resume.resume_details = details
         if commit: resume.save()
         return resume

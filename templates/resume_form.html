@@ -1,13 +1,35 @@
 ﻿{% load static %}
 <!doctype html>
 <html lang="uk">
-<head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>{% if resume %}Редагувати{% else %}Створити{% endif %} резюме</title><link rel="stylesheet" href="{% static 'resume/styles.css' %}"><link rel="stylesheet" href="{% static 'resume/themes.css' %}"><link rel="stylesheet" href="{% static 'resume/dark-premium.css' %}?v=16"></head>
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>{% if resume %}Редагувати{% else %}Створити{% endif %} резюме</title><link rel="stylesheet" href="{% static 'resume/styles.css' %}"><link rel="stylesheet" href="{% static 'resume/themes.css' %}"><link rel="stylesheet" href="{% static 'resume/dark-premium.css' %}?v=17"></head>
 <body>
   <header class="topbar"><a class="brand" href="{% url 'home' %}"><span class="brand-mark">r.</span><span>резюме<span class="brand-dot">.</span></span></a><div class="toolbar-actions"><a class="profile-avatar-link" href="{% url 'profile' %}" aria-label="До профілю">{% include "avatar.html" with user=request.user size="small" %}</a><a class="btn btn-quiet" href="{% url 'profile' %}">До кабінету</a></div></header>
   <main class="wrap editor-wrap"><div class="eyebrow">{% if resume %}Редагування резюме{% else %}Нове резюме · {{ template_name }}{% endif %}</div><h1 class="editor-title">Заповни своє резюме</h1>
     {% for message in messages %}<p class="form-success">{{ message }}</p>{% endfor %}
-    <section class="editor-card"><form method="post">{% csrf_token %}
-      {% for field in form %}{% if field.is_hidden %}{{ field }}{% elif field.field.widget.input_type == "checkbox" %}<label class="form-check">{{ field }}<span>{{ field.label }}</span></label>{% else %}<label class="form-field">{{ field.label }}{{ field }}{% for error in field.errors %}<small class="field-error">{{ error }}</small>{% endfor %}</label>{% endif %}{% endfor %}
+    <section class="editor-card"><form method="post" class="resume-editor-form">{% csrf_token %}
+      {% for field in form %}{% if field.name == "template" or field.name == "full_name" or field.name == "email" or field.name == "phone" or field.name == "location" or field.name == "position" or field.name == "summary" %}
+        <label class="form-field">{{ field.label }}{{ field }}{% for error in field.errors %}<small class="field-error">{{ error }}</small>{% endfor %}</label>
+      {% endif %}{% endfor %}
+      <div class="record-group" data-record-group="education_records">
+        <div class="record-group-heading"><div><h2>Освіта</h2><p>Додавайте окремий запис для кожного навчального закладу.</p></div><button type="button" class="btn btn-quiet" data-add-record>Додати освіту <span>+</span></button></div>
+        <div class="record-list" data-record-list></div>
+        {{ form.education_records }}{{ form.education }}{{ form.education_level }}
+      </div>
+      <div class="record-group" data-record-group="experience_records">
+        <div class="record-group-heading"><div><h2>Досвід роботи</h2><p>Посада, компанія та результати — кожне місце роботи окремим записом.</p></div><button type="button" class="btn btn-quiet" data-add-record>Додати місце роботи <span>+</span></button></div>
+        <div class="record-list" data-record-list></div>{{ form.experience_records }}{{ form.experience }}
+      </div>
+      <div class="record-group" data-record-group="language_records">
+        <div class="record-group-heading"><div><h2>Мови</h2><p>Вкажіть мову та рівень володіння.</p></div><button type="button" class="btn btn-quiet" data-add-record>Додати мову <span>+</span></button></div>
+        <div class="record-list" data-record-list></div>{{ form.language_records }}
+      </div>
+      <div class="record-group" data-record-group="skill_records">
+        <div class="record-group-heading"><div><h2>Навички</h2><p>Додавайте конкретні компетенції та позначайте рівень.</p></div><button type="button" class="btn btn-quiet" data-add-record>Додати навичку <span>+</span></button></div>
+        <div class="record-list" data-record-list></div>{{ form.skill_records }}{{ form.skills }}
+      </div>
+      <details class="optional-details"><summary>Додаткові побажання та характеристики</summary><div class="optional-fields">
+        {% for field in form %}{% if field.name == "experience_level" or field.name == "work_format" or field.name == "employment_type" or field.name == "seniority" or field.name == "salary_expectation" %}<label class="form-field">{{ field.label }}{{ field }}{% for error in field.errors %}<small class="field-error">{{ error }}</small>{% endfor %}</label>{% elif field.name == "travel_ready" or field.name == "relocation_ready" or field.name == "driving_license" %}<label class="form-check">{{ field }}<span>{{ field.label }}</span></label>{% endif %}{% endfor %}
+      </div></details>
       {% for error in form.non_field_errors %}<p class="field-error">{{ error }}</p>{% endfor %}
       <button class="btn btn-primary" type="submit">Зберегти та переглянути <span>↗</span></button>
       {% if resume %}<a class="btn btn-quiet" href="{% url 'resume_preview' resume.pk %}">Переглянути без змін</a>{% endif %}
@@ -18,7 +40,7 @@
       </article>{% empty %}<p class="muted-copy">Додайте проєкти, щоб показати приклади робіт.</p>{% endfor %}
     </section>{% endif %}
   </main>
-{% include "site_footer.html" %}<script src="{% static 'resume/app.js' %}?v=16"></script></body>
+{% include "site_footer.html" %}<script src="{% static 'resume/app.js' %}?v=17"></script><script src="{% static 'resume/resume-form.js' %}?v=1"></script></body>
 </html>
 
 

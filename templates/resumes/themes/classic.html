@@ -7,9 +7,9 @@
     <address class="classic-contact"><a href="mailto:{{ resume.email }}">{{ resume.email }}</a>{% if resume.phone %}<span>{{ resume.phone }}</span>{% endif %}{% if resume.location %}<span>{{ resume.location }}</span>{% endif %}</address>
   </header>
   {% if resume.summary %}<section class="classic-row"><h2>Profile</h2><div>{{ resume.summary|linebreaksbr }}</div></section>{% endif %}
-  {% if resume.experience %}<section class="classic-row"><h2>Experience</h2><div>{{ resume.experience|linebreaksbr }}</div></section>{% endif %}
-  {% if resume.education %}<section class="classic-row"><h2>Education</h2><div>{{ resume.education|linebreaksbr }}</div></section>{% endif %}
-  {% if resume.skills %}<section class="classic-row"><h2>Skills</h2><div>{{ resume.skills|linebreaksbr }}</div></section>{% endif %}
+  {% if resume.experience_records or resume.experience %}<section class="classic-row"><h2>Experience</h2><div>{% if resume.experience_records %}{% for row in resume.experience_records %}<p>{% if row.position %}<strong>{{ row.position }}</strong>{% endif %}{% if row.company %} · {{ row.company }}{% endif %}{% if row.years %} · {{ row.years }}{% endif %}{% if row.description %}<br>{{ row.description|linebreaksbr }}{% endif %}</p>{% endfor %}{% else %}{{ resume.experience|linebreaksbr }}{% endif %}</div></section>{% endif %}
+  {% with d=resume.resume_details %}{% if d.education_records or resume.education %}<section class="classic-row"><h2>Education</h2><div>{% if d.education_records %}{% for row in d.education_records %}<p>{% if row.level %}<strong>{{ row.level }}</strong>{% endif %}{% if row.school %} · {{ row.school }}{% endif %}{% if row.major %} · {{ row.major }}{% endif %}{% if row.years %} · {{ row.years }}{% endif %}{% if row.status %} · {{ row.status }}{% endif %}</p>{% endfor %}{% else %}{{ resume.education|linebreaksbr }}{% endif %}</div></section>{% endif %}
+  {% if d.skill_records or resume.skills %}<section class="classic-row"><h2>Skills</h2><div>{% if d.skill_records %}{% for row in d.skill_records %}<p>{{ row.skill }}{% if row.category %} · {{ row.category }}{% endif %}{% if row.level %} · {{ row.level }}{% endif %}</p>{% endfor %}{% else %}{{ resume.skills|linebreaksbr }}{% endif %}</div></section>{% endif %}{% endwith %}
   {% include "resumes/themes/_projects.html" %}
   {% include "resumes/themes/_details.html" %}
 </article>
