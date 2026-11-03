@@ -39,7 +39,9 @@
   @keyframes story-trust{0%{opacity:.3;translate:0 22px}45%,80%{opacity:1;translate:0 0}100%{opacity:.6;translate:0 -10px}}
   @keyframes line-draw{to{transform:scaleY(1)}}
 }
-@media(max-width:680px){.hero-art{animation:none!important}.template-card,.step{animation-range:entry 0% exit 70%}}
+@media(max-width:680px){.hero-art{transform-origin:center top;will-change:transform}.template-card,.step{animation-range:entry 0% exit 70%}}
+.scroll-js-fallback .hero-copy,.scroll-js-fallback .hero-art,.scroll-js-fallback .floating-note,.scroll-js-fallback .template-card,.scroll-js-fallback .section-heading>div,.scroll-js-fallback .step,.scroll-js-fallback .quote-inner,.scroll-js-fallback .trust-strip{animation:none!important;will-change:transform,opacity}
+.scroll-js-fallback .hero-art{scale:var(--story-scale,1)}
 @media(prefers-reduced-motion:reduce){.hero-copy,.hero-art,.floating-note,.template-card,.section-heading>div,.step,.quote-inner,.trust-strip{animation:none!important;opacity:1!important;translate:none!important;scale:1!important}}
 .template-card,.step,.quote-inner,.bottom-cta,.editor-card,.resume-list-card,.project-edit-card{--reveal-y:20px}.reveal-on-scroll{opacity:0;transform:translateY(var(--reveal-y));transition:opacity .65s ease,transform .65s cubic-bezier(.2,.7,.2,1)}.reveal-on-scroll.is-visible{opacity:1;transform:translateY(0)}.template-card:nth-child(2),.step:nth-child(2){transition-delay:80ms}.template-card:nth-child(3),.step:nth-child(3){transition-delay:150ms}.template-card:nth-child(4){transition-delay:220ms}
 @keyframes fade-up{from{opacity:0;transform:translateY(7px)}to{opacity:1;transform:translateY(0)}}@media(max-width:680px){.editor-card{padding:22px 18px}.main-nav{background:#141d2a}.resume-list-card{background:#141d2a}}@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important;scroll-behavior:auto!important}.reveal-on-scroll{opacity:1;transform:none}}

@@ -3,6 +3,52 @@ const templateDialog = document.querySelector('#templateDialog');
 let toast = document.querySelector('.toast');
 let toastTimer;
 
+// Mobile/older-browser fallback for scroll-driven story motion. Uses one
+// passive scroll listener + rAF and only transforms/opacity (no layout reads
+// after writes). Native CSS timelines remain preferred where supported.
+if (document.querySelector('.hero-art')) {
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+  const smallScreen = window.matchMedia('(max-width: 680px)');
+  const hasScrollTimelines = CSS.supports('animation-timeline: view()') && CSS.supports('animation-range: entry 0% exit 100%');
+  if (!reduceMotion.matches && (smallScreen.matches || !hasScrollTimelines)) {
+    document.documentElement.classList.add('scroll-js-fallback');
+    const storyItems = [...document.querySelectorAll('.hero-copy,.hero-art,.floating-note,.template-card,.section-heading>div,.step,.quote-inner,.trust-strip')];
+    let storyFrame = 0;
+    const clamp01 = value => Math.max(0, Math.min(1, value));
+    const updateStory = () => {
+      storyFrame = 0;
+      const vh = window.innerHeight || 700;
+      for (const item of storyItems) {
+        const rect = item.getBoundingClientRect();
+        const progress = clamp01((vh * .9 - rect.top) / (vh * .72 + rect.height));
+        const offset = (1 - progress) * (smallScreen.matches ? 20 : 30);
+        const scale = 0.965 + progress * 0.035;
+        item.style.opacity = String(.28 + progress * .72);
+        item.style.transform = `translate3d(0, ${offset.toFixed(1)}px, 0) scale(${scale.toFixed(3)})`;
+      }
+      const art = document.querySelector('.hero-art');
+      if (art) {
+        const progress = clamp01(window.scrollY / (smallScreen.matches ? 430 : 520));
+        art.style.setProperty('--story-scale', String(.94 + progress * .08));
+      }
+    };
+    const requestStoryUpdate = () => {
+      if (!storyFrame) storyFrame = window.requestAnimationFrame(updateStory);
+    };
+    window.addEventListener('scroll', requestStoryUpdate, { passive: true });
+    window.addEventListener('resize', requestStoryUpdate, { passive: true });
+    reduceMotion.addEventListener?.('change', event => {
+      if (event.matches) {
+        window.removeEventListener('scroll', requestStoryUpdate);
+        window.removeEventListener('resize', requestStoryUpdate);
+        document.documentElement.classList.remove('scroll-js-fallback');
+        storyItems.forEach(item => { item.style.opacity = ''; item.style.transform = ''; });
+      } else requestStoryUpdate();
+    });
+    requestStoryUpdate();
+  }
+}
+
 // The anchor hash is the navigation source of truth; scroll observation keeps
 // the selected tab in sync when the user moves through the landing page.
 const mainNav = document.querySelector('.main-nav');

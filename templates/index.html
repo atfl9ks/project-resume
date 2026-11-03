@@ -1,4 +1,4 @@
-﻿{% load static %}<!doctype html>
+{% load static %}<!doctype html>
 <html lang="uk">
 <head>
   <meta charset="utf-8">
@@ -10,7 +10,7 @@
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="{% static 'resume/styles.css' %}">
   <link rel="stylesheet" href="{% static 'resume/themes.css' %}">
-<link rel="stylesheet" href="{% static 'resume/dark-premium.css' %}?v=16"></head>
+<link rel="stylesheet" href="{% static 'resume/dark-premium.css' %}?v=17"></head>
 <body data-authenticated="{% if user.is_authenticated %}true{% else %}false{% endif %}">
   <header class="topbar">
     <a class="brand" href="#top" aria-label="Резюме — на головну"><span class="brand-mark">r.</span><span>резюме<span class="brand-dot">.</span></span></a>
@@ -54,7 +54,7 @@
   <dialog class="auth-dialog" id="authDialog"><button class="dialog-close" aria-label="Закрити">×</button><div class="eyebrow">Твій наступний крок</div><h2 id="dialogTitle">Почнімо з резюме</h2><p id="dialogCopy">Створи акаунт, щоб зберігати й редагувати свої резюме.</p><form id="authForm" method="post" action="{% url 'register' %}">{% csrf_token %}<div id="signupFields"><label>Ім’я користувача<input name="username" autocomplete="username" placeholder="Наприклад, olena_k" required></label><label>Ваше ім’я<input name="display_name" placeholder="Олена Коваленко" required></label></div><label>Електронна пошта<input name="email" type="email" autocomplete="email" placeholder="name@email.com" required></label>{% include "signup_password_fields.html" %}<button class="btn btn-primary" type="submit" id="authSubmit" data-registration-submit disabled>Створити акаунт <span>↗</span></button></form><p class="auth-switch" id="authSwitch">Вже маєш акаунт? <button type="button" data-open-auth="login">Увійти</button></p></dialog>
   <dialog class="template-dialog" id="templateDialog"><button class="dialog-close" aria-label="Закрити">×</button><div class="eyebrow">Перегляд шаблону</div><h2 id="templateTitle">Мінімалістичний</h2><p id="templateDescription">Лаконічний дизайн, що підкреслює зміст.</p><div class="dialog-template-preview" id="templatePreview" aria-live="polite"></div><button class="btn btn-primary choose-template">Створити з цим шаблоном <span>↗</span></button></dialog>
   <div class="toast" role="status" aria-live="polite"></div>
-  <script src="{% static 'resume/app.js' %}?v=16"></script>
+  <script src="{% static 'resume/app.js' %}?v=17"></script>
 </body>
 </html>
 
