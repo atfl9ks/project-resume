@@ -27,9 +27,10 @@
     const list = group.querySelector('[data-record-list]');
     if (!config || !hidden || !list) return;
 
-    const createRow = (values = {}) => {
+    const createRow = (values = {}, isDraft = false) => {
       const row = document.createElement('fieldset');
       row.className = 'record-card';
+      if (isDraft) row.dataset.draft = 'true';
       const legend = document.createElement('legend'); legend.textContent = config.title; row.append(legend);
       config.fields.forEach(([name, label, type, options]) => {
         const wrap = document.createElement('label'); wrap.className = 'form-field record-field'; wrap.textContent = label;
@@ -56,8 +57,14 @@
         wrap.append(control); row.append(wrap);
       });
       const remove = document.createElement('button'); remove.type = 'button'; remove.className = 'link-button record-remove'; remove.textContent = 'Видалити запис';
-      remove.addEventListener('click', () => { row.remove(); sync(); }); row.append(remove);
-      row.addEventListener('input', sync); row.addEventListener('change', sync); list.append(row);
+      remove.addEventListener('click', () => { row.remove(); sync(); if (isDraft) setDraftOpen(false); }); row.append(remove);
+      const updateDraftState = () => {
+        const hasContent = [...row.querySelectorAll('[data-record-field]')].some(input => input.value.trim());
+        if (hasContent) { delete row.dataset.draft; setDraftOpen(false); }
+        else if (isDraft) { row.dataset.draft = 'true'; setDraftOpen(!row.hidden); }
+        sync();
+      };
+      row.addEventListener('input', updateDraftState); row.addEventListener('change', updateDraftState); list.append(row);
     };
     const sync = () => {
       const rows = [...list.querySelectorAll('.record-card')].map(row => Object.fromEntries([...row.querySelectorAll('[data-record-field]')].map(input => [input.dataset.recordField, input.value.trim()]))).filter(row => Object.values(row).some(Boolean));
@@ -65,7 +72,29 @@
     };
     const existing = parse(hidden);
     existing.forEach(createRow);
-    group.querySelector('[data-add-record]')?.addEventListener('click', () => { createRow(); sync(); list.lastElementChild?.querySelector('input,select,textarea')?.focus(); });
+    const addButton = group.querySelector('[data-add-record]');
+    addButton?.setAttribute('aria-expanded', 'false');
+    const buttonText = addButton?.firstChild;
+    const addLabel = buttonText?.textContent?.trim() || 'Додати запис';
+    const setDraftOpen = (open) => {
+      addButton?.setAttribute('aria-expanded', String(open));
+      if (buttonText) buttonText.textContent = open ? 'Сховати форму ' : `${addLabel} `;
+    };
+    addButton?.addEventListener('click', () => {
+      const emptyDraft = [...list.querySelectorAll('[data-draft="true"]')].find(row =>
+        ![...row.querySelectorAll('[data-record-field]')].some(input => input.value.trim())
+      );
+      if (emptyDraft) {
+        emptyDraft.hidden = !emptyDraft.hidden;
+        setDraftOpen(!emptyDraft.hidden);
+        if (!emptyDraft.hidden) emptyDraft.querySelector('input,select,textarea')?.focus();
+        return;
+      }
+      createRow({}, true);
+      sync();
+      setDraftOpen(true);
+      list.lastElementChild?.querySelector('input,select,textarea')?.focus();
+    });
     if (!existing.length) hidden.value = '[]'; else sync();
   });
 
