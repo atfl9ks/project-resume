@@ -1,0 +1,26 @@
+﻿<article class="cv cv-creative">
+  <header class="creative-header">
+    <div class="creative-orbit" aria-hidden="true">✳</div>
+    <p class="creative-label">A LITTLE ABOUT ME</p>
+    {% if resume.photo %}<img class="cv-photo" src="{{ resume.photo.url }}" alt="Photo of {{ resume.full_name }}">{% endif %}
+    <h1>{{ resume.full_name }}</h1>
+    {% if resume.position %}<p class="cv-position">{{ resume.position }}</p>{% endif %}
+    <address><a href="mailto:{{ resume.email }}">{{ resume.email }}</a>{% if resume.phone %}<span>{{ resume.phone }}</span>{% endif %}{% if resume.location %}<span>{{ resume.location }}</span>{% endif %}</address>
+  </header>
+  <div class="creative-body">
+    <div class="creative-main">
+      {% if resume.summary %}<section class="creative-block creative-about"><span class="creative-tag">01 / HELLO</span><h2>A point of view</h2><p>{{ resume.summary|linebreaksbr }}</p></section>{% endif %}
+      {% if resume.experience %}<section class="creative-block"><span class="creative-tag">02 / THE JOURNEY</span><h2>Experience</h2><p>{{ resume.experience|linebreaksbr }}</p></section>{% endif %}
+      {% include "resumes/themes/_projects.html" %}
+      {% include "resumes/themes/_details.html" %}
+    </div>
+    <aside class="creative-aside">
+      {% if resume.skills %}<section class="creative-block"><span class="creative-tag">03 / TOOLKIT</span><h2>Things I do</h2><div>{{ resume.skills|linebreaksbr }}</div></section>{% endif %}
+      {% if resume.education %}<section class="creative-block"><span class="creative-tag">04 / ROOTS</span><h2>Learning</h2><div>{{ resume.education|linebreaksbr }}</div></section>{% endif %}
+      <span class="creative-stamp" aria-hidden="true">MAKE<br>GOOD<br>THINGS</span>
+    </aside>
+  </div>
+</article>
+
+
+

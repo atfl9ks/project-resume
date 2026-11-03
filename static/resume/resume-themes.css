@@ -1,0 +1,100 @@
+/* Resume templates: each theme owns a distinct page architecture. */
+.cv-photo{width:88px;height:104px;object-fit:cover;border-radius:4px;display:block}
+.cv address{font-style:normal}.cv a{overflow-wrap:anywhere}.cv .cv-projects{margin-top:32px}.cv .cv-projects>h2{margin-bottom:10px}.cv .project-tech strong{font-weight:700}.resume-preview{max-width:960px}
+
+/* Classic: traditional editorial rows with labels in a narrow left rail. */
+.cv-classic{padding:64px 76px 72px;border-top:8px solid #27384a;font-family:Georgia,'Times New Roman',serif;color:#26303b}
+.classic-header{text-align:center;padding:0 0 25px;border-bottom:2px solid #27384a;position:relative}
+.classic-header .cv-kicker{font:700 9px/1.4 Arial,sans-serif;letter-spacing:3px;color:#607387}
+.classic-header h1{font:600 39px/1.12 Georgia,serif;letter-spacing:.2px}
+.classic-header .cv-position{font:italic 16px Georgia,serif;color:#526476}
+.classic-header .cv-photo{margin:16px auto 0;border-radius:50%;width:76px;height:76px}
+.classic-contact{display:flex;justify-content:center;flex-wrap:wrap;gap:7px 20px;margin-top:19px;font:11px Arial,sans-serif;color:#4f5c68}
+.classic-row{display:grid;grid-template-columns:145px 1fr;gap:24px;padding:17px 0;border-bottom:1px solid #d8dde1;font:13px/1.75 Georgia,serif}
+.classic-row h2{font:700 10px/1.5 Arial,sans-serif;letter-spacing:1.6px;text-transform:uppercase;color:#334d65;margin:2px 0}
+.classic-row p{margin:0}.cv-classic .cv-project{border-top:1px solid #d8dde1}
+
+/* Modern: dark profile rail and numbered content panels. */
+.cv-modern{display:grid;grid-template-columns:286px 1fr;padding:0;min-height:800px;background:#fff;font-family:'DM Sans',Arial,sans-serif;color:#202632}
+.modern-rail{background:#293243;color:#f8f7fb;padding:54px 31px;min-height:800px}
+.modern-monogram{width:42px;height:42px;border-radius:13px;background:#bdff62;color:#273242;display:grid;place-items:center;font:700 21px Manrope,sans-serif;margin-bottom:31px}
+.modern-rail .cv-photo{width:88px;height:88px;border-radius:50%;margin-bottom:22px;border:3px solid #bdff62}
+.modern-rail h1{font:700 28px/1.08 Manrope,sans-serif;letter-spacing:-1px;overflow-wrap:anywhere}
+.modern-rail .cv-position{font-size:13px;color:#b6c0d0;line-height:1.55}
+.modern-contact,.modern-rail-section{margin-top:35px;padding-top:17px;border-top:1px solid #485265;font-size:11px;line-height:1.85}
+.modern-contact h2,.modern-rail-section h2{font:700 10px Manrope,sans-serif;text-transform:uppercase;letter-spacing:1.6px;color:#bdff62;margin:0 0 10px}
+.modern-contact a,.modern-contact span{display:block;margin:5px 0;overflow-wrap:anywhere}.modern-rail-section div{color:#e0e5ec}
+.modern-main{padding:59px 48px 55px}.modern-feature{display:grid;grid-template-columns:38px 1fr;gap:15px;padding:20px 0 26px;border-bottom:1px solid #e6e9ef}
+.modern-index{font:700 12px Manrope,sans-serif;color:#8da4c8;padding-top:4px}.modern-feature h2,.cv-modern .cv-projects>h2{font:700 17px Manrope,sans-serif;margin:0 0 12px;color:#293243}
+.modern-feature p{margin:0;font-size:13px;line-height:1.8;color:#586273}.cv-modern .cv-projects{margin-top:28px}.cv-modern .cv-project{border-color:#e5e9ef}.cv-modern .cv-project-links,.cv-modern .cv-attachment{color:#506888}
+
+/* Minimal: generous whitespace and a small numbered section index. */
+.cv-minimal{padding:82px 100px;background:#fff;color:#242823;font-family:Arial,sans-serif;min-height:820px}
+.minimal-header{display:grid;grid-template-columns:1fr auto;align-items:center;gap:20px;padding:0 0 35px;border-bottom:1px solid #dedfd9}
+.minimal-overline{font:10px Arial,sans-serif;letter-spacing:2px;color:#989b93;margin:0 0 18px;text-transform:uppercase}.minimal-overline span{color:#b7bbaf;padding:0 5px}
+.minimal-header h1{font:400 43px/1.12 Arial,sans-serif;letter-spacing:-2.1px}.minimal-header .cv-position{font-size:13px;color:#858980}
+.minimal-header .cv-photo{grid-column:2;grid-row:1/3;width:68px;height:82px;border-radius:0;filter:grayscale(1)}
+.minimal-contact{grid-column:1/-1;display:flex;flex-wrap:wrap;gap:8px 20px;margin-top:4px;font:11px/1.6 Arial,sans-serif;color:#777d73}
+.minimal-section{display:grid;grid-template-columns:40px 1fr;gap:21px;padding:22px 0;border-bottom:1px solid #ecece8}.minimal-count{font:11px Arial,sans-serif;color:#a5a89f;padding-top:3px}
+.minimal-section h2{font:700 10px Arial,sans-serif;text-transform:uppercase;letter-spacing:1.7px;color:#666e62;margin:0 0 10px}.minimal-section p{font:13px/1.85 Arial,sans-serif;margin:0;color:#454a43}
+.cv-minimal .cv-projects{margin-top:24px}.cv-minimal .cv-projects>h2{font:700 10px Arial,sans-serif;letter-spacing:1.7px;color:#666e62}.cv-minimal .cv-project{border-color:#ecece8;padding:13px 0}
+
+/* Creative: oversized coral masthead, offset grid and playful labels. */
+.cv-creative{padding:0;background:#fbf3e7;color:#272524;font-family:'DM Sans',Arial,sans-serif}
+.creative-header{min-height:312px;position:relative;overflow:hidden;background:#fa654e;color:#fff1dc;padding:48px 62px 42px 24%}
+.creative-orbit{position:absolute;left:-50px;top:27px;width:235px;height:235px;border:1px solid rgba(255,241,220,.5);border-radius:50%;display:grid;place-items:center;font-size:100px;color:#ffca64}
+.creative-label,.creative-tag{font:700 9px Manrope,sans-serif;letter-spacing:2px}.creative-label{margin:0 0 20px;color:#ffe1ad}
+.creative-header h1{font:800 48px/.98 Manrope,sans-serif;letter-spacing:-2.7px;max-width:490px}.creative-header .cv-position{font-size:16px;color:#ffe0c9}
+.creative-header .cv-photo{position:absolute;right:50px;top:45px;width:94px;height:110px;border:4px solid #ffe0b0;transform:rotate(4deg)}
+.creative-header address{display:flex;flex-wrap:wrap;gap:8px 16px;font-size:10px;margin-top:22px;color:#fff1dc}
+.creative-body{display:grid;grid-template-columns:1.45fr .8fr;gap:34px;padding:37px 49px 62px}.creative-block{margin-bottom:28px}
+.creative-tag{display:block;color:#fa654e;margin-bottom:10px}.creative-block h2,.cv-creative .cv-projects>h2{font:700 18px Manrope,sans-serif;margin:0 0 10px}
+.creative-block p,.creative-block div{font-size:12px;line-height:1.8;color:#55514b}.creative-about{padding:22px;background:#fffdf8;border-left:5px solid #ffca64;transform:rotate(-.5deg)}
+.creative-aside{border-left:1px dashed #d4be9e;padding-left:25px}.creative-stamp{display:inline-grid;place-items:center;border:2px solid #fa654e;color:#fa654e;border-radius:50%;width:94px;height:94px;text-align:center;font:700 10px/1.4 Manrope,sans-serif;transform:rotate(11deg);margin-top:15px}
+.cv-creative .cv-project{border-top:1px solid #e3d5c2}.cv-creative .cv-project-links,.cv-creative .cv-attachment{color:#c44b3a}
+
+/* Professional: corporate masthead followed by a measured information grid. */
+.cv-professional{padding:0 67px 65px;border-top:13px solid #163e60;color:#1d3447;font-family:Arial,sans-serif}
+.professional-header{display:flex;align-items:center;justify-content:space-between;gap:25px;padding:48px 0 27px;border-bottom:1px solid #b8c7d2}
+.professional-eyebrow{font:700 9px Arial,sans-serif;letter-spacing:2px;color:#47718d;margin:0 0 12px}.professional-header h1{font:700 34px/1.1 Arial,sans-serif;letter-spacing:-1px}.professional-header .cv-position{font-size:14px;color:#547184}
+.professional-header .cv-photo{width:75px;height:90px;border:3px solid #e2ebf0}.professional-contact{display:flex;flex-wrap:wrap;gap:7px 23px;padding:13px 0;color:#486276;border-bottom:3px solid #163e60;font-size:10px}
+.professional-summary{display:grid;grid-template-columns:6px 1fr;gap:17px;padding:24px 0 27px}.professional-rule{background:#2c8aa0}
+.professional-summary h2,.professional-section h2,.cv-professional .cv-projects>h2{font:700 11px Arial,sans-serif;text-transform:uppercase;letter-spacing:1px;color:#163e60;margin:0 0 10px}
+.professional-summary p,.professional-section>div{font:12px/1.75 Arial,sans-serif;color:#455766;margin:0}.professional-grid{display:grid;grid-template-columns:1fr 1fr;gap:26px 35px}
+.professional-section{padding-top:15px;border-top:1px solid #d4dee5}.professional-wide{grid-column:1/-1}.cv-professional .cv-project{border-top:1px solid #d4dee5}.cv-professional .cv-project-links,.cv-professional .cv-attachment{color:#226783}
+
+/* Executive: deep navy profile column paired with a serif career page. */
+.cv-executive{display:grid;grid-template-columns:310px 1fr;padding:0;background:#fff;color:#222b34;font-family:Georgia,'Times New Roman',serif;min-height:860px}
+.executive-sidebar{background:#192b3b;color:#f2eee3;padding:48px 35px;min-height:860px}.executive-sidebar .cv-photo{width:108px;height:126px;object-fit:cover;border:1px solid #c9b98d;margin-bottom:28px;filter:saturate(.7)}
+.executive-monogram{width:74px;height:74px;border:1px solid #c9b98d;border-radius:50%;display:grid;place-items:center;font:italic 32px Georgia,serif;color:#d9c999;margin:0 0 31px}
+.executive-caption{font:700 8px Arial,sans-serif;letter-spacing:2px;color:#cfbd8b}.executive-sidebar h1{font:400 31px/1.08 Georgia,serif;overflow-wrap:anywhere}.executive-sidebar .cv-position{font:italic 14px Georgia,serif;color:#c5c8c2}
+.executive-contact,.executive-side-section{border-top:1px solid #43505b;padding-top:17px;margin-top:30px;font:11px/1.8 Arial,sans-serif}.executive-contact h2,.executive-side-section h2{font:700 9px Arial,sans-serif;text-transform:uppercase;letter-spacing:1.5px;color:#d7c99f;margin:0 0 9px}
+.executive-contact a,.executive-contact span{display:block;margin:4px 0;overflow-wrap:anywhere}.executive-side-section div{color:#d5d8d4}
+.executive-main{padding:53px 48px 34px;position:relative}.executive-topline{display:flex;justify-content:space-between;border-bottom:1px solid #d7d0bf;padding-bottom:13px;font:700 8px Arial,sans-serif;letter-spacing:1.5px;color:#887849}
+.executive-section{padding:24px 0;border-bottom:1px solid #e4e0d7}.executive-section h2,.cv-executive .cv-projects>h2{font:italic 21px Georgia,serif;color:#1a354a;margin:0 0 13px}.executive-section p{font:13px/1.85 Georgia,serif;color:#4b4b46;margin:0}
+.cv-executive .cv-project{border-top:1px solid #e4e0d7}.cv-executive .cv-project-links,.cv-executive .cv-attachment{color:#78683e}.executive-footer{margin-top:32px;padding-top:14px;border-top:2px solid #192b3b;font:9px Arial,sans-serif;color:#72766f;overflow-wrap:anywhere}.executive-footer span{color:#ab965b;padding:0 5px}
+
+/* Keep the saved developer identity available for older resumes. */
+.cv-developer .developer-header .cv-photo{float:right;width:82px;height:96px;border:2px solid #8bd8bd}
+.preview-creative{background:#f3d2c6}.preview-professional{background:#d8e3eb}.preview-executive{background:#d8d4c7}
+.mini-creative{border-left:7px solid #fa654e;transform:rotate(2deg)}.mini-creative .mini-head span{background:#ffca64}.mini-creative .mini-head i{background:#fa654e}
+.mini-professional{border-top:5px solid #163e60;border-radius:1px}.mini-professional .mini-head span{background:#dceaf1}
+.mini-executive{background:#f5f1e8;border-left:23px solid #192b3b}.mini-executive .mini-head span{background:#d9c999;border-radius:50%;width:23px;height:23px}
+.template-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
+.template-dialog[data-template-id="creative"] .dialog-template-preview{background:#fbf3e7;border-left:8px solid #fa654e;border-radius:0}
+.template-dialog[data-template-id="professional"] .dialog-template-preview{background:#edf3f6;border-top:7px solid #163e60;border-radius:2px}
+.template-dialog[data-template-id="executive"] .dialog-template-preview{background:#f5f1e8;border-left:48px solid #192b3b;border-radius:1px}
+@media(max-width:700px){
+  .cv-photo{width:66px;height:78px}.cv-classic{padding:38px 25px}.classic-row{grid-template-columns:1fr;gap:5px}
+  .cv-modern,.cv-executive{grid-template-columns:1fr}.modern-rail,.executive-sidebar{min-height:0;padding:34px 26px}.modern-main,.executive-main{padding:30px 25px 38px}
+  .cv-minimal{padding:45px 28px}.minimal-header h1{font-size:34px}.creative-header{padding:38px 25px 35px 23%;min-height:285px}.creative-header h1{font-size:36px}
+  .creative-header .cv-photo{position:static;width:62px;height:72px;margin-bottom:12px}.creative-orbit{width:150px;height:150px;font-size:70px;left:-44px;top:80px}
+  .creative-body{grid-template-columns:1fr;padding:28px 25px 40px;gap:0}.creative-aside{border-left:0;border-top:1px dashed #d4be9e;padding:22px 0 0}
+  .professional-header h1{font-size:28px}.cv-professional{padding:0 25px 40px}.professional-grid{grid-template-columns:1fr;gap:19px}.professional-wide{grid-column:auto}.template-grid{grid-template-columns:1fr}
+}
+@media print{.cv-modern,.cv-executive{min-height:0}.modern-rail,.executive-sidebar{min-height:100%;-webkit-print-color-adjust:exact;print-color-adjust:exact}.creative-header,.modern-rail,.executive-sidebar,.professional-header{-webkit-print-color-adjust:exact;print-color-adjust:exact}.cv-photo{print-color-adjust:exact}}
+.compare-entry,.compare-nav{width:min(960px,calc(100% - 36px));margin:16px auto 0;display:flex;justify-content:flex-end;gap:8px;flex-wrap:wrap}
+.compare-mode .toolbar-actions button{display:none!important}
+.resume-comparison{width:min(1100px,calc(100% - 32px));margin:24px auto 60px;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:28px}
+.comparison-item{min-width:0}.comparison-item>h2{font:700 18px Manrope,sans-serif;margin:0 0 10px}.comparison-item .resume-preview{width:100%;margin:0}.comparison-item .cv{transform-origin:top left;min-height:760px}
+@media(max-width:760px){.resume-comparison{grid-template-columns:1fr}.comparison-item .cv{min-height:0}}

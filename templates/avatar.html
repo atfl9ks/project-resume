@@ -1,0 +1,7 @@
+﻿<span class="user-avatar user-avatar--{{ size|default:'medium' }}" data-avatar-root aria-label="Аватар {{ user.display_name|default:user.username }}">
+  {% if user.avatar %}<img data-avatar-image src="{{ user.avatar.url }}" alt="" />{% endif %}
+  <span data-avatar-fallback {% if user.avatar %}hidden{% endif %}>{{ user.first_name|default:user.display_name|default:user.username|first|upper }}</span>
+</span>
+
+
+

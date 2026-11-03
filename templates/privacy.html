@@ -1,0 +1,34 @@
+﻿{% load static %}
+<!doctype html>
+<html lang="uk">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="theme-color" content="#0b1018">
+  <meta name="description" content="Політика конфіденційності сервісу Резюме: які дані ми зберігаємо та як ви можете керувати ними.">
+  <title>Політика конфіденційності — Резюме</title>
+  <link rel="stylesheet" href="{% static 'resume/styles.css' %}"><link rel="stylesheet" href="{% static 'resume/themes.css' %}"><link rel="stylesheet" href="{% static 'resume/dark-premium.css' %}?v=16">
+</head>
+<body class="privacy-page">
+  <header class="topbar"><a class="brand" href="{% url 'home' %}"><span class="brand-mark">r.</span><span>резюме<span class="brand-dot">.</span></span></a><nav class="privacy-topnav" aria-label="Навігація"><a href="{% url 'home' %}#templates">Шаблони</a>{% if user.is_authenticated %}<a class="btn btn-quiet" href="{% url 'profile' %}">{% include "avatar.html" with user=user size="small" %}<span>Мій кабінет</span></a>{% else %}<a class="btn btn-quiet" href="{% url 'login' %}">Увійти</a>{% endif %}</nav></header>
+  <main class="privacy-wrap">
+    <a class="privacy-back" href="{% url 'home' %}">← На головну</a>
+    <div class="privacy-heading"><span class="eyebrow">Ваші дані — під вашим контролем</span><h1>Політика<br><span>конфіденційності.</span></h1><p>Пояснюємо просто, які дані потрібні сервісу «Резюме», для чого вони використовуються та як ви можете керувати ними.</p><small>Оновлено 3 листопада 2026 року</small></div>
+    <div class="privacy-layout">
+      <nav class="privacy-index" aria-label="Зміст політики"><a href="#data">Які дані</a><a href="#purpose">Навіщо</a><a href="#storage">Зберігання й доступ</a><a href="#cookies">Файли cookie</a><a href="#rights">Ваші права</a><a href="#contact">Зв’язок</a></nav>
+      <div class="privacy-content">
+        <section id="data"><span class="privacy-number">01</span><div><h2>Які дані ми отримуємо</h2><p>Коли ви створюєте обліковий запис, ми зберігаємо адресу електронної пошти, ім’я користувача та ім’я для профілю. Ім’я і прізвище можна додати або змінити в налаштуваннях.</p><p>Дані, які ви вводите в резюме (контакти, освіта, досвід, навички, проєкти та інші розділи), завантажені файли проєктів і фото профілю зберігаються, щоб ви могли повернутися до них, редагувати та створювати документи.</p><p>Пароль зберігається у вигляді криптографічного хешу; сервіс не зберігає його у відкритому вигляді.</p></div></section>
+        <section id="purpose"><span class="privacy-number">02</span><div><h2>Для чого вони потрібні</h2><p>Дані використовуються для входу в обліковий запис, збереження та редагування резюме, показу фото профілю, формування файлів для завантаження, захисту від несанкціонованого доступу та відповіді на ваші звернення.</p><p>Ми не продаємо вміст ваших резюме й не надсилаємо його роботодавцям від вашого імені. Ви самі вирішуєте, кому передавати створений або завантажений документ.</p></div></section>
+        <section id="storage"><span class="privacy-number">03</span><div><h2>Зберігання й доступ</h2><p>Дані облікового запису та резюме зберігаються в базі даних сервісу. Фото і файли проєктів зберігаються у файловому сховищі сайту. Доступ до функцій редагування та перегляду резюме обмежений вашим обліковим записом.</p><p>Фото профілю завантажується на сайт і використовується в його інтерфейсі; посилання на файл аватара може відкриватися без входу. Не використовуйте як аватар зображення, яке має залишатися приватним.</p><p>Під час входу використовуються технічні cookie для сесії та захисту форм. Сторонні шрифти Google Fonts можуть отримувати стандартні технічні дані браузера під час їх завантаження. У поточній версії сайту рекламні cookie та аналітичні трекери не підключені.</p></div></section>
+        <section id="cookies"><span class="privacy-number">04</span><div><h2>Файли cookie</h2><p>Необхідні cookie підтримують авторизацію, безпечне надсилання форм і роботу сайту. Вони не використовуються тут для рекламного профілювання. Якщо вимкнути cookie в браузері, вхід і збереження змін можуть працювати некоректно.</p></div></section>
+        <section id="rights"><span class="privacy-number">05</span><div><h2>Ваші права та керування даними</h2><p>Ви можете переглядати й виправляти дані профілю та резюме в кабінеті, видаляти фото аватара, а також звернутися із запитом на доступ, виправлення або видалення персональних даних. Щоб попросити видалити обліковий запис або інші дані, напишіть нам із адреси електронної пошти, прив’язаної до акаунта.</p><p>Ми опрацюємо звернення відповідно до застосовного законодавства України. Детальніше — у <a href="https://zakon.rada.gov.ua/laws/show/2297-17#Text" target="_blank" rel="noopener noreferrer">Законі України «Про захист персональних даних»</a>.</p></div></section>
+        <section id="contact"><span class="privacy-number">06</span><div><h2>Зв’язатися з нами</h2><p>Запитання про приватність або керування даними? Напишіть на <a href="mailto:resume2026emailbot@gmail.com">resume2026emailbot@gmail.com</a>. У листі вкажіть адресу акаунта та опишіть, що саме потрібно змінити.</p></div></section>
+      </div>
+    </div>
+    <div class="privacy-note"><span aria-hidden="true">✦</span><p>Ми оновлюємо цю сторінку, коли змінюються функції сайту або правила обробки даних. Дата останнього оновлення завжди вказана на початку.</p></div>
+  </main>
+  {% include "site_footer.html" %}
+</body>
+</html>
+
+
+
+

@@ -1,13 +1,13 @@
-{% load static %}
+﻿{% load static %}
 <!doctype html>
 <html lang="uk">
-<head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>{% if resume %}Редагувати{% else %}Створити{% endif %} резюме</title><link rel="stylesheet" href="{% static 'resume/styles.css' %}"><link rel="stylesheet" href="{% static 'resume/themes.css' %}"></head>
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>{% if resume %}Редагувати{% else %}Створити{% endif %} резюме</title><link rel="stylesheet" href="{% static 'resume/styles.css' %}"><link rel="stylesheet" href="{% static 'resume/themes.css' %}"><link rel="stylesheet" href="{% static 'resume/dark-premium.css' %}?v=16"></head>
 <body>
-  <header class="topbar"><a class="brand" href="{% url 'home' %}"><span class="brand-mark">r.</span><span>резюме<span class="brand-dot">.</span></span></a><a class="btn btn-quiet" href="{% url 'profile' %}">До кабінету</a></header>
+  <header class="topbar"><a class="brand" href="{% url 'home' %}"><span class="brand-mark">r.</span><span>резюме<span class="brand-dot">.</span></span></a><div class="toolbar-actions"><a class="profile-avatar-link" href="{% url 'profile' %}" aria-label="До профілю">{% include "avatar.html" with user=request.user size="small" %}</a><a class="btn btn-quiet" href="{% url 'profile' %}">До кабінету</a></div></header>
   <main class="wrap editor-wrap"><div class="eyebrow">{% if resume %}Редагування резюме{% else %}Нове резюме · {{ template_name }}{% endif %}</div><h1 class="editor-title">Заповни своє резюме</h1>
     {% for message in messages %}<p class="form-success">{{ message }}</p>{% endfor %}
     <section class="editor-card"><form method="post">{% csrf_token %}
-      {% for field in form %}<label class="form-field">{{ field.label }}{{ field }}{% for error in field.errors %}<small class="field-error">{{ error }}</small>{% endfor %}</label>{% endfor %}
+      {% for field in form %}{% if field.is_hidden %}{{ field }}{% elif field.field.widget.input_type == "checkbox" %}<label class="form-check">{{ field }}<span>{{ field.label }}</span></label>{% else %}<label class="form-field">{{ field.label }}{{ field }}{% for error in field.errors %}<small class="field-error">{{ error }}</small>{% endfor %}</label>{% endif %}{% endfor %}
       {% for error in form.non_field_errors %}<p class="field-error">{{ error }}</p>{% endfor %}
       <button class="btn btn-primary" type="submit">Зберегти та переглянути <span>↗</span></button>
       {% if resume %}<a class="btn btn-quiet" href="{% url 'resume_preview' resume.pk %}">Переглянути без змін</a>{% endif %}
@@ -18,5 +18,8 @@
       </article>{% empty %}<p class="muted-copy">Додайте проєкти, щоб показати приклади робіт.</p>{% endfor %}
     </section>{% endif %}
   </main>
-</body>
+{% include "site_footer.html" %}<script src="{% static 'resume/app.js' %}?v=16"></script></body>
 </html>
+
+
+

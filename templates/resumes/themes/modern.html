@@ -1,5 +1,20 @@
-<article class="cv cv-modern">
-  <header class="modern-header"><div><p class="cv-kicker">PROFILE / MODERN</p><h1>{{ resume.full_name }}</h1><p class="cv-position">{{ resume.position }}</p></div><div class="modern-contact">{{ resume.email }}{% if resume.phone %}<br>{{ resume.phone }}{% endif %}{% if resume.location %}<br>{{ resume.location }}{% endif %}</div></header>
-  {% if resume.summary %}<section class="cv-section modern-section"><h2>01 / Про мене</h2><div>{{ resume.summary|linebreaksbr }}</div></section>{% endif %}
-  <div class="modern-columns"><div>{% if resume.experience %}<section class="cv-section modern-section"><h2>02 / Досвід</h2><div>{{ resume.experience|linebreaksbr }}</div></section>{% endif %}{% include "resumes/themes/_projects.html" %}</div><aside>{% if resume.skills %}<section class="cv-section modern-section"><h2>Навички</h2><div>{{ resume.skills|linebreaksbr }}</div></section>{% endif %}{% if resume.education %}<section class="cv-section modern-section"><h2>Освіта</h2><div>{{ resume.education|linebreaksbr }}</div></section>{% endif %}</aside></div>
+﻿<article class="cv cv-modern">
+  <aside class="modern-rail">
+    <div class="modern-monogram">{{ resume.full_name|first|upper }}</div>
+    {% if resume.photo %}<img class="cv-photo" src="{{ resume.photo.url }}" alt="Photo of {{ resume.full_name }}">{% endif %}
+    <h1>{{ resume.full_name }}</h1>
+    {% if resume.position %}<p class="cv-position">{{ resume.position }}</p>{% endif %}
+    <section class="modern-contact"><h2>Contact</h2><a href="mailto:{{ resume.email }}">{{ resume.email }}</a>{% if resume.phone %}<span>{{ resume.phone }}</span>{% endif %}{% if resume.location %}<span>{{ resume.location }}</span>{% endif %}</section>
+    {% if resume.skills %}<section class="modern-rail-section"><h2>Skills</h2><div>{{ resume.skills|linebreaksbr }}</div></section>{% endif %}
+    {% if resume.education %}<section class="modern-rail-section"><h2>Education</h2><div>{{ resume.education|linebreaksbr }}</div></section>{% endif %}
+  </aside>
+  <div class="modern-main">
+    {% if resume.summary %}<section class="modern-feature"><span class="modern-index">01</span><div><h2>About</h2><p>{{ resume.summary|linebreaksbr }}</p></div></section>{% endif %}
+    {% if resume.experience %}<section class="modern-feature"><span class="modern-index">02</span><div><h2>Experience</h2><p>{{ resume.experience|linebreaksbr }}</p></div></section>{% endif %}
+    {% include "resumes/themes/_projects.html" %}
+    {% include "resumes/themes/_details.html" %}
+  </div>
 </article>
+
+
+

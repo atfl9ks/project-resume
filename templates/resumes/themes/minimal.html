@@ -1,8 +1,16 @@
-<article class="cv cv-minimal">
-  <header class="minimal-header"><h1>{{ resume.full_name }}</h1><p class="cv-position">{{ resume.position }}</p><p class="minimal-contact">{{ resume.email }}{% if resume.phone %} · {{ resume.phone }}{% endif %}{% if resume.location %} · {{ resume.location }}{% endif %}</p></header>
-  {% if resume.summary %}<section class="cv-section"><h2>Про мене</h2><div>{{ resume.summary|linebreaksbr }}</div></section>{% endif %}
-  {% if resume.experience %}<section class="cv-section"><h2>Досвід</h2><div>{{ resume.experience|linebreaksbr }}</div></section>{% endif %}
-  {% if resume.education %}<section class="cv-section"><h2>Освіта</h2><div>{{ resume.education|linebreaksbr }}</div></section>{% endif %}
-  {% if resume.skills %}<section class="cv-section"><h2>Ключові навички</h2><div>{{ resume.skills|linebreaksbr }}</div></section>{% endif %}
+﻿<article class="cv cv-minimal">
+  <header class="minimal-header">
+    <div class="minimal-identity"><p class="minimal-overline">RESUME <span>—</span> {{ resume.position|default:"PROFILE" }}</p><h1>{{ resume.full_name }}</h1></div>
+    {% if resume.photo %}<img class="cv-photo" src="{{ resume.photo.url }}" alt="Photo of {{ resume.full_name }}">{% endif %}
+    <address class="minimal-contact"><a href="mailto:{{ resume.email }}">{{ resume.email }}</a>{% if resume.phone %}<span>{{ resume.phone }}</span>{% endif %}{% if resume.location %}<span>{{ resume.location }}</span>{% endif %}</address>
+  </header>
+  {% if resume.summary %}<section class="minimal-section minimal-intro"><span class="minimal-count">01</span><div><h2>Introduction</h2><p>{{ resume.summary|linebreaksbr }}</p></div></section>{% endif %}
+  {% if resume.experience %}<section class="minimal-section"><span class="minimal-count">02</span><div><h2>Experience</h2><p>{{ resume.experience|linebreaksbr }}</p></div></section>{% endif %}
+  {% if resume.education %}<section class="minimal-section"><span class="minimal-count">03</span><div><h2>Education</h2><p>{{ resume.education|linebreaksbr }}</p></div></section>{% endif %}
+  {% if resume.skills %}<section class="minimal-section"><span class="minimal-count">04</span><div><h2>Skills</h2><p>{{ resume.skills|linebreaksbr }}</p></div></section>{% endif %}
   {% include "resumes/themes/_projects.html" %}
+  {% include "resumes/themes/_details.html" %}
 </article>
+
+
+

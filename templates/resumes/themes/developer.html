@@ -1,7 +1,0 @@
-<article class="cv cv-developer">
-  <header class="developer-header"><p class="developer-label">&lt; developer /&gt;</p><h1>{{ resume.full_name }}</h1><p class="cv-position">{{ resume.position }}</p><div class="developer-contact">{{ resume.email }}{% if resume.phone %}<span>{{ resume.phone }}</span>{% endif %}{% if resume.location %}<span>{{ resume.location }}</span>{% endif %}</div></header>
-  {% if resume.skills %}<section class="cv-section developer-section"><h2>TECH STACK</h2><div>{{ resume.skills|linebreaksbr }}</div></section>{% endif %}
-  {% include "resumes/themes/_projects.html" %}
-  {% if resume.summary %}<section class="cv-section developer-section"><h2>ABOUT</h2><div>{{ resume.summary|linebreaksbr }}</div></section>{% endif %}
-  <div class="developer-columns">{% if resume.experience %}<section class="cv-section developer-section"><h2>EXPERIENCE</h2><div>{{ resume.experience|linebreaksbr }}</div></section>{% endif %}{% if resume.education %}<section class="cv-section developer-section"><h2>EDUCATION</h2><div>{{ resume.education|linebreaksbr }}</div></section>{% endif %}</div>
-</article>

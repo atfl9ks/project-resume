@@ -1,9 +1,18 @@
-<article class="cv cv-classic">
-  <header class="cv-header"><p class="cv-kicker">CURRICULUM VITAE</p><h1>{{ resume.full_name }}</h1><p class="cv-position">{{ resume.position }}</p></header>
-  <div class="cv-contact">{{ resume.email }}{% if resume.phone %}<span>{{ resume.phone }}</span>{% endif %}{% if resume.location %}<span>{{ resume.location }}</span>{% endif %}</div>
-  {% if resume.summary %}<section class="cv-section"><h2>Профіль</h2><div>{{ resume.summary|linebreaksbr }}</div></section>{% endif %}
-  {% if resume.experience %}<section class="cv-section"><h2>Досвід роботи</h2><div>{{ resume.experience|linebreaksbr }}</div></section>{% endif %}
-  {% if resume.education %}<section class="cv-section"><h2>Освіта</h2><div>{{ resume.education|linebreaksbr }}</div></section>{% endif %}
-  {% if resume.skills %}<section class="cv-section"><h2>Навички</h2><div>{{ resume.skills|linebreaksbr }}</div></section>{% endif %}
+﻿<article class="cv cv-classic">
+  <header class="classic-header">
+    <p class="cv-kicker">CURRICULUM VITAE</p>
+    <h1>{{ resume.full_name }}</h1>
+    {% if resume.position %}<p class="cv-position">{{ resume.position }}</p>{% endif %}
+    {% if resume.photo %}<img class="cv-photo" src="{{ resume.photo.url }}" alt="Photo of {{ resume.full_name }}">{% endif %}
+    <address class="classic-contact"><a href="mailto:{{ resume.email }}">{{ resume.email }}</a>{% if resume.phone %}<span>{{ resume.phone }}</span>{% endif %}{% if resume.location %}<span>{{ resume.location }}</span>{% endif %}</address>
+  </header>
+  {% if resume.summary %}<section class="classic-row"><h2>Profile</h2><div>{{ resume.summary|linebreaksbr }}</div></section>{% endif %}
+  {% if resume.experience %}<section class="classic-row"><h2>Experience</h2><div>{{ resume.experience|linebreaksbr }}</div></section>{% endif %}
+  {% if resume.education %}<section class="classic-row"><h2>Education</h2><div>{{ resume.education|linebreaksbr }}</div></section>{% endif %}
+  {% if resume.skills %}<section class="classic-row"><h2>Skills</h2><div>{{ resume.skills|linebreaksbr }}</div></section>{% endif %}
   {% include "resumes/themes/_projects.html" %}
+  {% include "resumes/themes/_details.html" %}
 </article>
+
+
+

@@ -1,13 +1,16 @@
-{% load static %}
+﻿{% load static %}
 <!doctype html>
 <html lang="uk">
-<head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Додати проєкт</title><link rel="stylesheet" href="{% static 'resume/styles.css' %}"><link rel="stylesheet" href="{% static 'resume/themes.css' %}"></head>
-<body><header class="topbar"><a class="brand" href="{% url 'profile' %}"><span class="brand-mark">r.</span><span>резюме<span class="brand-dot">.</span></span></a><a class="btn btn-quiet" href="{% url 'resume_edit' resume.pk %}">Назад до резюме</a></header>
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Додати проєкт</title><link rel="stylesheet" href="{% static 'resume/styles.css' %}"><link rel="stylesheet" href="{% static 'resume/themes.css' %}"><link rel="stylesheet" href="{% static 'resume/dark-premium.css' %}?v=16"></head>
+<body><header class="topbar"><a class="brand" href="{% url 'profile' %}"><span class="brand-mark">r.</span><span>резюме<span class="brand-dot">.</span></span></a><div class="toolbar-actions"><a class="profile-avatar-link" href="{% url 'profile' %}" aria-label="До профілю">{% include "avatar.html" with user=request.user size="small" %}</a><a class="btn btn-quiet" href="{% url 'resume_edit' resume.pk %}">Назад до резюме</a></div></header>
   <main class="wrap editor-wrap"><div class="eyebrow">Портфоліо · {{ resume.full_name }}</div><h1 class="editor-title">Додати проєкт</h1>
     <section class="editor-card"><form method="post" enctype="multipart/form-data">{% csrf_token %}
       {% for field in form %}<label class="form-field">{{ field.label }}{{ field }}{% if field.name == 'files' %}<small class="muted-copy">До 5 файлів за раз, до 10 МБ кожен. PDF, PNG, JPG, WEBP, TXT, MD або ZIP.</small>{% endif %}{% for error in field.errors %}<small class="field-error">{{ error }}</small>{% endfor %}</label>{% endfor %}
       {% for error in form.non_field_errors %}<p class="field-error">{{ error }}</p>{% endfor %}<button class="btn btn-primary" type="submit">Зберегти проєкт <span>↗</span></button>
     </form></section>
   </main>
-</body>
+{% include "site_footer.html" %}<script src="{% static 'resume/app.js' %}?v=16"></script></body>
 </html>
+
+
+

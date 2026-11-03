@@ -3,23 +3,45 @@ from django.db import models
 from django.utils import timezone
 from uuid import uuid4
 
-from .validators import validate_portfolio_file
+from .validators import validate_avatar, validate_portfolio_file
 
 
 class User(AbstractUser):
     email = models.EmailField("email", unique=True)
+    email_verified = models.BooleanField(default=False)
+    pending_email = models.EmailField(blank=True, default="")
+    avatar = models.ImageField(upload_to="avatars/%Y/%m/", blank=True, null=True, validators=[validate_avatar])
     display_name = models.CharField("ім’я", max_length=120)
 
     def __str__(self):
         return self.email
 
 
+class EmailVerification(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="email_verifications")
+    email = models.EmailField()
+    token_hash = models.CharField(max_length=64, unique=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    expires_at = models.DateTimeField()
+    used_at = models.DateTimeField(null=True, blank=True)
+
+    class Meta:
+        indexes = [models.Index(fields=["user", "expires_at"])]
+
+
 class Resume(models.Model):
+    EDUCATION_CHOICES = [(v, v) for v in ["Среднее образование", "Среднее специальное", "Профессионально-техническое", "Незаконченное высшее", "Бакалавриат", "Магистратура", "Докторантура", "Другое"]]
+    EXPERIENCE_CHOICES = [(v, v) for v in ["Без опыта", "Стажировка", "До 1 года", "1–3 года", "3–5 лет", "5–10 лет", "Более 10 лет"]]
+    WORK_FORMAT_CHOICES = [(v, v) for v in ["Удалённо", "В офисе", "Гибридный формат"]]
+    EMPLOYMENT_CHOICES = [(v, v) for v in ["Полная занятость", "Частичная занятость", "Проектная работа", "Контракт", "Стажировка", "Временная работа"]]
+    LEVEL_CHOICES = [(v, v) for v in ["Стажёр", "Junior", "Middle", "Senior", "Lead", "Manager", "Director"]]
+    resume_details = models.JSONField(default=dict, blank=True)
+    experience_records = models.JSONField(default=list, blank=True)
     TEMPLATE_CHOICES = [
         ("classic", "Classic"),
         ("modern", "Modern"),
         ("minimal", "Minimal"),
-        ("developer", "Developer"),
+        ("creative", "Creative"),
     ]
 
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="resumes")

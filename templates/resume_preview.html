@@ -1,16 +1,21 @@
-{% load static %}
+﻿{% load static %}
 <!doctype html>
 <html lang="uk">
 <head>
   <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
   <title>{{ resume.full_name }} — резюме</title>
-  <link rel="stylesheet" href="{% static 'resume/styles.css' %}"><link rel="stylesheet" href="{% static 'resume/themes.css' %}">
-</head>
-<body class="resume-page">
+  <link rel="stylesheet" href="{% static 'resume/styles.css' %}"><link rel="stylesheet" href="{% static 'resume/themes.css' %}"><link rel="stylesheet" href="{% static 'resume/resume-themes.css' %}">
+<link rel="stylesheet" href="{% static 'resume/dark-premium.css' %}?v=16"></head>
+<body class="resume-page{% if compare_templates %} compare-mode{% endif %}">
   <header class="topbar resume-toolbar">
     <a class="brand" href="{% url 'profile' %}"><span class="brand-mark">r.</span><span>резюме<span class="brand-dot">.</span></span></a>
-    <div class="toolbar-actions"><a class="btn btn-quiet" href="{% url 'profile' %}">До кабінету</a><a class="btn btn-dark" href="{% url 'resume_edit' resume.pk %}">Редагувати резюме</a><button class="btn btn-primary" type="button" onclick="window.print()">Друк / PDF</button></div>
+    <div class="toolbar-actions"><a class="profile-avatar-link" href="{% url 'profile' %}" aria-label="До профілю">{% include "avatar.html" with user=request.user size="small" %}</a><a class="btn btn-quiet" href="{% url 'profile' %}">До кабінету</a><a class="btn btn-dark" href="{% url 'resume_edit' resume.pk %}">Редагувати резюме</a><button class="btn btn-primary" type="button" onclick="window.print()">Друк / PDF</button></div>
   </header>
-  <main class="resume-preview resume-theme-{{ resume.template }}">{% include theme_template %}</main>
-</body>
+  {% if not compare_templates %}<div class="compare-entry"><a class="btn btn-quiet" href="?compare=1">Сравнить все четыре шаблона</a></div>{% endif %}
+  {% if compare_templates %}<nav class="compare-nav" aria-label="Compare resume approaches"><a class="btn btn-primary" href="?compare=0">Single preview</a></nav><main class="resume-comparison">{% for key, path in compare_templates %}<section class="comparison-item" id="{{ key }}"><h2>{{ key|title }}</h2><div class="resume-preview resume-theme-{{ key }}">{% include path %}</div></section>{% endfor %}</main>{% else %}<main class="resume-preview resume-theme-{{ resume.template }}">{% include theme_template %}</main>{% endif %}
+{% include "site_footer.html" %}<script src="{% static 'resume/app.js' %}?v=16"></script></body>
+{% if compare_templates %}<script>window.print = () => false;document.addEventListener('keydown', event => { if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === 'p') { event.preventDefault(); event.stopImmediatePropagation(); } }, true);</script>{% endif %}
 </html>
+
+
+

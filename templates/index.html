@@ -1,4 +1,4 @@
-{% load static %}<!doctype html>
+﻿{% load static %}<!doctype html>
 <html lang="uk">
 <head>
   <meta charset="utf-8">
@@ -10,12 +10,12 @@
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="{% static 'resume/styles.css' %}">
   <link rel="stylesheet" href="{% static 'resume/themes.css' %}">
-</head>
+<link rel="stylesheet" href="{% static 'resume/dark-premium.css' %}?v=16"></head>
 <body data-authenticated="{% if user.is_authenticated %}true{% else %}false{% endif %}">
   <header class="topbar">
     <a class="brand" href="#top" aria-label="Резюме — на головну"><span class="brand-mark">r.</span><span>резюме<span class="brand-dot">.</span></span></a>
     <nav class="main-nav" aria-label="Головна навігація"><a class="active" href="#templates">Шаблони</a><a href="#how">Як це працює</a><a href="#news">Поради</a></nav>
-    <div class="nav-actions">{% if user.is_authenticated %}<a class="btn btn-quiet" href="{% url 'profile' %}">{{ user.display_name|default:user.username }}</a><form action="{% url 'logout' %}" method="post">{% csrf_token %}<button class="btn btn-dark" type="submit">Вийти</button></form>{% else %}<button class="btn btn-quiet" data-open-auth="login">Увійти</button><button class="btn btn-dark" data-open-auth="signup">Створити резюме <span aria-hidden="true">↗</span></button>{% endif %}<button class="menu-toggle" aria-label="Відкрити меню">☰</button></div>
+    <div class="nav-actions">{% if user.is_authenticated %}<a class="nav-profile" href="{% url 'profile' %}">{% include "avatar.html" with user=user size="small" %}<span>{{ user.display_name|default:user.username }}</span></a><form action="{% url 'logout' %}" method="post">{% csrf_token %}<button class="btn btn-dark" type="submit">Вийти</button></form>{% else %}<button class="btn btn-quiet" data-open-auth="login">Увійти</button><button class="btn btn-dark" data-open-auth="signup">Створити резюме <span aria-hidden="true">↗</span></button>{% endif %}<button class="menu-toggle" aria-label="Відкрити меню">☰</button></div>
   </header>
 
   <main id="top">
@@ -39,7 +39,7 @@
         <article class="template-card"><div class="template-preview preview-sage"><div class="mini-resume mini-classic"><div class="mini-head"><span></span><i></i></div><div class="mini-body"><div><b></b><i></i><i></i><i></i><b></b><i></i><i></i></div><div><b></b><i></i><i></i><b></b><i></i><i></i></div></div></div><span class="popular-tag">Популярний</span><button class="preview-btn" data-template="Classic" data-template-id="classic">Переглянути ↗</button></div><div class="template-meta"><div><h3>Classic</h3><p>Стриманий професійний формат</p></div><button class="arrow-btn" data-template="Classic" data-template-id="classic" aria-label="Обрати Classic">↗</button></div></article>
         <article class="template-card"><div class="template-preview preview-lilac"><div class="mini-resume mini-modern"><div class="mini-head"><span></span><i></i></div><div class="mini-body"><div><b></b><i></i><i></i><i></i><b></b><i></i></div><div><b></b><i></i><i></i><b></b><i></i></div></div></div><button class="preview-btn" data-template="Modern" data-template-id="modern">Переглянути ↗</button></div><div class="template-meta"><div><h3>Modern</h3><p>Виразні акценти та сучасна сітка</p></div><button class="arrow-btn" data-template="Modern" data-template-id="modern" aria-label="Обрати Modern">↗</button></div></article>
         <article class="template-card"><div class="template-preview preview-blue"><div class="mini-resume mini-minimal"><div class="mini-head"><span></span><i></i></div><div class="mini-body"><div><b></b><i></i><i></i><b></b><i></i></div><div><b></b><i></i><i></i><i></i><b></b><i></i></div></div></div><button class="preview-btn" data-template="Minimal" data-template-id="minimal">Переглянути ↗</button></div><div class="template-meta"><div><h3>Minimal</h3><p>Повітряний макет без зайвих деталей</p></div><button class="arrow-btn" data-template="Minimal" data-template-id="minimal" aria-label="Обрати Minimal">↗</button></div></article>
-        <article class="template-card"><div class="template-preview preview-code"><div class="mini-resume mini-developer"><div class="mini-head"><span></span><i></i></div><div class="mini-body"><div><b></b><i></i><i></i><b></b><i></i><i></i></div><div><b></b><i></i><i></i><b></b><i></i></div></div></div><button class="preview-btn" data-template="Developer" data-template-id="developer">Переглянути ↗</button></div><div class="template-meta"><div><h3>Developer</h3><p>Технології, проєкти та портфоліо</p></div><button class="arrow-btn" data-template="Developer" data-template-id="developer" aria-label="Обрати Developer">↗</button></div></article>
+        <article class="template-card"><div class="template-preview preview-creative"><div class="mini-resume mini-creative"><div class="mini-head"><span></span><i></i></div><div class="mini-body"><div><b></b><i></i><i></i><b></b><i></i></div><div><b></b><i></i><i></i><i></i></div></div></div><button class="preview-btn" data-template="Creative" data-template-id="creative">Переглянути ↗</button></div><div class="template-meta"><div><h3>Creative</h3><p>Виразна композиція та яскрава палітра</p></div><button class="arrow-btn" data-template="Creative" data-template-id="creative" aria-label="Обрати Creative">↗</button></div></article>
       </div>
     </div></section>
 
@@ -49,11 +49,14 @@
 
     <section class="bottom-cta wrap"><div><div class="eyebrow">Наступний крок за тобою</div><h2>Твій досвід заслуговує<br>на <span>чудову презентацію.</span></h2></div><a class="btn btn-primary" href="#templates">Створити резюме <span>↗</span></a><div class="cta-stamp">безкоштовно<br>і без зайвого</div></section>
   </main>
-  <footer class="footer"><div class="wrap footer-row"><a class="brand" href="#top"><span class="brand-mark">r.</span><span>резюме<span class="brand-dot">.</span></span></a><span>© 2024 Резюме. Твій наступний крок починається тут.</span><div><a href="#how">Допомога</a><a href="#news">Конфіденційність</a><a href="mailto:hello@rezume.ua">Зв'язатися</a></div></div></footer>
+  {% include "site_footer.html" %}
 
-  <dialog class="auth-dialog" id="authDialog"><button class="dialog-close" aria-label="Закрити">×</button><div class="eyebrow">Твій наступний крок</div><h2 id="dialogTitle">Почнімо з резюме</h2><p id="dialogCopy">Створи акаунт, щоб зберігати й редагувати свої резюме.</p><form id="authForm" method="post" action="{% url 'register' %}">{% csrf_token %}<div id="signupFields"><label>Ім’я користувача<input name="username" autocomplete="username" placeholder="Наприклад, olena_k" required></label><label>Ваше ім’я<input name="display_name" placeholder="Олена Коваленко" required></label></div><label>Електронна пошта<input name="email" type="email" autocomplete="email" placeholder="name@email.com" required></label><label>Пароль<input name="password1" type="password" autocomplete="new-password" placeholder="Мінімум 8 символів" minlength="8" required></label><label id="confirmPassword">Підтвердіть пароль<input name="password2" type="password" autocomplete="new-password" minlength="8" required></label><button class="btn btn-primary" type="submit" id="authSubmit">Створити акаунт <span>↗</span></button></form><p class="auth-switch" id="authSwitch">Вже маєш акаунт? <button type="button" data-open-auth="login">Увійти</button></p></dialog>
-  <dialog class="template-dialog" id="templateDialog"><button class="dialog-close" aria-label="Закрити">×</button><div class="eyebrow">Перегляд шаблону</div><h2 id="templateTitle">Мінімалістичний</h2><p>Лаконічна структура, чіткі акценти й усе важливе на своєму місці.</p><div class="dialog-template-preview"><span>Олена Коваленко</span><small>Product Designer</small><hr><b>ДОСВІД РОБОТИ</b><p>Senior Product Designer · Bright Studio</p><b>ОСВІТА</b><p>Графічний дизайн · КНУТД</p></div><button class="btn btn-primary choose-template">Створити з цим шаблоном <span>↗</span></button></dialog>
+  <dialog class="auth-dialog" id="authDialog"><button class="dialog-close" aria-label="Закрити">×</button><div class="eyebrow">Твій наступний крок</div><h2 id="dialogTitle">Почнімо з резюме</h2><p id="dialogCopy">Створи акаунт, щоб зберігати й редагувати свої резюме.</p><form id="authForm" method="post" action="{% url 'register' %}">{% csrf_token %}<div id="signupFields"><label>Ім’я користувача<input name="username" autocomplete="username" placeholder="Наприклад, olena_k" required></label><label>Ваше ім’я<input name="display_name" placeholder="Олена Коваленко" required></label></div><label>Електронна пошта<input name="email" type="email" autocomplete="email" placeholder="name@email.com" required></label>{% include "signup_password_fields.html" %}<button class="btn btn-primary" type="submit" id="authSubmit" data-registration-submit disabled>Створити акаунт <span>↗</span></button></form><p class="auth-switch" id="authSwitch">Вже маєш акаунт? <button type="button" data-open-auth="login">Увійти</button></p></dialog>
+  <dialog class="template-dialog" id="templateDialog"><button class="dialog-close" aria-label="Закрити">×</button><div class="eyebrow">Перегляд шаблону</div><h2 id="templateTitle">Мінімалістичний</h2><p id="templateDescription">Лаконічний дизайн, що підкреслює зміст.</p><div class="dialog-template-preview" id="templatePreview" aria-live="polite"></div><button class="btn btn-primary choose-template">Створити з цим шаблоном <span>↗</span></button></dialog>
   <div class="toast" role="status" aria-live="polite"></div>
-  <script src="{% static 'resume/app.js' %}"></script>
+  <script src="{% static 'resume/app.js' %}?v=16"></script>
 </body>
 </html>
+
+
+
