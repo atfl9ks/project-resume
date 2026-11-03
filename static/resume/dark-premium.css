@@ -42,6 +42,36 @@
 @media(max-width:680px){.hero-art{transform-origin:center top;will-change:transform}.template-card,.step{animation-range:entry 0% exit 70%}}
 .scroll-js-fallback .hero-copy,.scroll-js-fallback .hero-art,.scroll-js-fallback .floating-note,.scroll-js-fallback .template-card,.scroll-js-fallback .section-heading>div,.scroll-js-fallback .step,.scroll-js-fallback .quote-inner,.scroll-js-fallback .trust-strip{animation:none!important;will-change:transform,opacity}
 .scroll-js-fallback .hero-art{scale:var(--story-scale,1)}
+.scroll-js-fallback .steps::before{animation:none!important;transform:scaleY(var(--steps-progress,0))!important;transform-origin:top;transition:transform .05s linear}
+@media(max-width:680px){.quote-inner{padding-bottom:10px}.quote-author{display:grid;grid-template-columns:34px minmax(0,1fr);align-items:center;column-gap:10px;row-gap:10px}.quote-author>div:nth-child(2){min-width:0}.quote-author small{max-width:100%!important}.quote-stars{grid-column:2;grid-row:2;margin:0!important;letter-spacing:2px!important}.quote-count{position:static!important;display:flex;justify-content:flex-end;margin-top:10px;font-size:11px;letter-spacing:.04em}}
+.quote-count{position:static!important;display:flex;justify-content:flex-end;margin-top:12px;font-size:11px;letter-spacing:.04em}
+.template-card:hover .mini-minimal{transform:translateY(-5px) scale(1.025)!important;box-shadow:0 16px 34px rgba(0,0,0,.28)!important}
+.template-card:hover .mini-creative{transform:rotate(0deg) translateY(-5px) scale(1.025)!important;box-shadow:0 18px 38px rgba(0,0,0,.38)!important}
+.hero-art .resume-paper{animation:resume-float 6.8s ease-in-out infinite;transform-origin:50% 55%;will-change:transform}
+.hero-art .note-top{animation:note-float-top 5.6s ease-in-out infinite;will-change:transform}
+.hero-art .note-bottom{animation:note-float-bottom 6.2s ease-in-out infinite;will-change:transform}
+.hero-art .art-orbit{animation:orbit-breathe 8s ease-in-out infinite}
+.hero-art .orbit-two{animation-delay:-4s}
+.hero-art .paper-changing{animation:paper-copy-in .48s ease both}
+.quote-inner{animation:none!important;opacity:1!important;transform:none!important;translate:none!important;scale:1!important}
+.quote-inner blockquote{min-height:2.8em}
+.graffiti-art{grid-column:2/4;grid-row:2;min-height:260px;display:flex;flex-direction:column;align-items:center;justify-content:center;position:relative;overflow:hidden;color:#9aa8bb}
+.graffiti-art svg{width:min(100%,620px);height:auto;overflow:visible;filter:drop-shadow(0 8px 22px rgba(69,204,224,.1))}
+.graffiti-art .graffiti-word{font:italic 700 100px Georgia,serif;letter-spacing:-7px;fill:transparent;stroke:url(#graffitiGradient);stroke-width:1.8;paint-order:stroke;stroke-linecap:round;stroke-linejoin:round}
+.graffiti-art .graffiti-word-second{font-size:84px;stroke-width:1.6}
+.graffiti-art .graffiti-stroke,.graffiti-art .graffiti-spark{fill:none;stroke:url(#graffitiGradient);stroke-width:3;stroke-linecap:round;stroke-linejoin:round}
+.graffiti-art .graffiti-dot{fill:#00ffc6;opacity:.7}
+.graffiti-art span{margin-top:-8px;font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:#9aa8bb}
+.graffiti-art.is-drawing .graffiti-word{fill:transparent}
+.graffiti-art.is-complete .graffiti-word{fill:url(#graffitiGradient);stroke-width:.7}
+@media(max-width:680px){.graffiti-art{grid-column:1/-1;grid-row:auto;min-height:190px;margin-top:8px}.graffiti-art .graffiti-word{font-size:92px}.graffiti-art .graffiti-word-second{font-size:77px}}
+@media(max-width:380px){.graffiti-art{min-height:165px}.graffiti-art svg{filter:drop-shadow(0 4px 10px rgba(69,204,224,.08))}.graffiti-art .graffiti-word{font-size:80px;letter-spacing:-5px}.graffiti-art .graffiti-word-second{font-size:68px}}
+@keyframes resume-float{0%,100%{transform:translate3d(0,0,0) rotate(3deg)}50%{transform:translate3d(0,-12px,0) rotate(1deg)}}
+@keyframes note-float-top{0%,100%{transform:translate3d(0,0,0)}50%{transform:translate3d(5px,-9px,0)}}
+@keyframes note-float-bottom{0%,100%{transform:translate3d(0,0,0)}50%{transform:translate3d(-5px,8px,0)}}
+@keyframes orbit-breathe{0%,100%{scale:1;opacity:.72}50%{scale:1.035;opacity:.95}}
+@keyframes paper-copy-in{from{opacity:.15;transform:translateY(5px)}to{opacity:1;transform:translateY(0)}}
+@media(prefers-reduced-motion:reduce){.hero-art .resume-paper,.hero-art .note-top,.hero-art .note-bottom,.hero-art .art-orbit{animation:none!important}.hero-art .paper-changing{animation:none!important}}
 @media(prefers-reduced-motion:reduce){.hero-copy,.hero-art,.floating-note,.template-card,.section-heading>div,.step,.quote-inner,.trust-strip{animation:none!important;opacity:1!important;translate:none!important;scale:1!important}}
 .template-card,.step,.quote-inner,.bottom-cta,.editor-card,.resume-list-card,.project-edit-card{--reveal-y:20px}.reveal-on-scroll{opacity:0;transform:translateY(var(--reveal-y));transition:opacity .65s ease,transform .65s cubic-bezier(.2,.7,.2,1)}.reveal-on-scroll.is-visible{opacity:1;transform:translateY(0)}.template-card:nth-child(2),.step:nth-child(2){transition-delay:80ms}.template-card:nth-child(3),.step:nth-child(3){transition-delay:150ms}.template-card:nth-child(4){transition-delay:220ms}
 @keyframes fade-up{from{opacity:0;transform:translateY(7px)}to{opacity:1;transform:translateY(0)}}@media(max-width:680px){.editor-card{padding:22px 18px}.main-nav{background:#141d2a}.resume-list-card{background:#141d2a}}@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important;scroll-behavior:auto!important}.reveal-on-scroll{opacity:1;transform:none}}

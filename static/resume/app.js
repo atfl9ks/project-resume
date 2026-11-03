@@ -3,6 +3,96 @@ const templateDialog = document.querySelector('#templateDialog');
 let toast = document.querySelector('.toast');
 let toastTimer;
 
+// The landing-page resume mockup gently cycles through example profiles.
+const paper = document.querySelector('.hero-art .resume-paper');
+if (paper && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+  const profiles = [
+    { name: 'Олена<br>Коваленко', role: 'Product Designer', initials: 'ОК', skill: 'Figma' },
+    { name: 'Максим<br>Шевченко', role: 'Frontend Developer', initials: 'МШ', skill: 'JavaScript' },
+    { name: 'Ірина<br>Мельник', role: 'Marketing Manager', initials: 'ІМ', skill: 'Strategy' },
+  ];
+  const name = paper.querySelector('.paper-person h2');
+  const role = paper.querySelector('.paper-person p');
+  const portrait = paper.querySelector('.portrait');
+  const skill = paper.querySelector('.skill-pill');
+  let profileIndex = 0;
+  window.setInterval(() => {
+    if (document.hidden) return;
+    profileIndex = (profileIndex + 1) % profiles.length;
+    const profile = profiles[profileIndex];
+    [name, role, portrait, skill].forEach(node => node?.classList.remove('paper-changing'));
+    if (name) name.innerHTML = profile.name;
+    if (role) role.textContent = profile.role;
+    if (portrait) portrait.textContent = profile.initials;
+    if (skill) skill.textContent = profile.skill;
+    requestAnimationFrame(() => [name, role, portrait, skill].forEach(node => node?.classList.add('paper-changing')));
+  }, 4200);
+}
+
+// Scroll-linked typewriter for the testimonial. Progress is remembered so the
+// text never erases when the visitor scrolls back upward.
+const quoteBlock = document.querySelector('.quote-inner blockquote');
+if (quoteBlock) {
+  const fullQuote = quoteBlock.textContent.trim();
+  const quoteChars = Array.from(fullQuote);
+  const quoteSection = quoteBlock.closest('.quote-section');
+  let maxQuoteProgress = 0;
+  let quoteFrame = 0;
+  if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) quoteBlock.textContent = '';
+  const updateQuote = () => {
+    quoteFrame = 0;
+    if (!quoteSection) return;
+    const rect = quoteSection.getBoundingClientRect();
+    const viewport = window.innerHeight || 700;
+    const progress = Math.max(0, Math.min(1, (viewport * .82 - rect.top) / (viewport * .58)));
+    maxQuoteProgress = Math.max(maxQuoteProgress, progress);
+    const visibleChars = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+      ? quoteChars.length : Math.floor(maxQuoteProgress * quoteChars.length);
+    quoteBlock.textContent = quoteChars.slice(0, visibleChars).join('');
+    if (maxQuoteProgress >= 1) quoteBlock.classList.add('quote-complete');
+  };
+  const requestQuoteUpdate = () => {
+    if (!quoteFrame) quoteFrame = window.requestAnimationFrame(updateQuote);
+  };
+  window.addEventListener('scroll', requestQuoteUpdate, { passive: true });
+  window.addEventListener('resize', requestQuoteUpdate, { passive: true });
+  updateQuote();
+}
+
+// Draw the decorative graffiti in the template section as the visitor scrolls
+// into it; retain the maximum progress so it stays complete on scroll-up.
+const graffiti = document.querySelector('.graffiti-art');
+if (graffiti) {
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+  const strokes = [...graffiti.querySelectorAll('.graffiti-word,.graffiti-stroke,.graffiti-spark')];
+  let maxProgress = 0;
+  let frame = 0;
+  strokes.forEach(stroke => {
+    stroke.style.strokeDasharray = '1';
+    stroke.style.strokeDashoffset = reduceMotion.matches ? '0' : '1';
+  });
+  if (reduceMotion.matches) graffiti.classList.add('is-complete');
+  const updateGraffiti = () => {
+    frame = 0;
+    const rect = graffiti.getBoundingClientRect();
+    const viewport = window.innerHeight || 700;
+    const progress = reduceMotion.matches ? 1 : Math.max(0, Math.min(1, (viewport * .86 - rect.top) / (viewport * .9)));
+    maxProgress = Math.max(maxProgress, progress);
+    graffiti.classList.toggle('is-drawing', maxProgress > 0 && maxProgress < 1);
+    if (maxProgress >= 1) graffiti.classList.add('is-complete');
+    strokes.forEach((stroke, index) => {
+      const local = Math.max(0, Math.min(1, (maxProgress - index * .08) / .76));
+      stroke.style.strokeDashoffset = String(1 - local);
+    });
+  };
+  const requestGraffitiUpdate = () => {
+    if (!frame) frame = window.requestAnimationFrame(updateGraffiti);
+  };
+  window.addEventListener('scroll', requestGraffitiUpdate, { passive: true });
+  window.addEventListener('resize', requestGraffitiUpdate, { passive: true });
+  updateGraffiti();
+}
+
 // Mobile/older-browser fallback for scroll-driven story motion. Uses one
 // passive scroll listener + rAF and only transforms/opacity (no layout reads
 // after writes). Native CSS timelines remain preferred where supported.
@@ -12,7 +102,8 @@ if (document.querySelector('.hero-art')) {
   const hasScrollTimelines = CSS.supports('animation-timeline: view()') && CSS.supports('animation-range: entry 0% exit 100%');
   if (!reduceMotion.matches && (smallScreen.matches || !hasScrollTimelines)) {
     document.documentElement.classList.add('scroll-js-fallback');
-    const storyItems = [...document.querySelectorAll('.hero-copy,.hero-art,.floating-note,.template-card,.section-heading>div,.step,.quote-inner,.trust-strip')];
+    const storyItems = [...document.querySelectorAll('.hero-copy,.hero-art,.floating-note,.template-card,.section-heading>div,.step,.trust-strip')];
+    const stepsTrack = document.querySelector('.steps');
     let storyFrame = 0;
     const clamp01 = value => Math.max(0, Math.min(1, value));
     const updateStory = () => {
@@ -25,6 +116,12 @@ if (document.querySelector('.hero-art')) {
         const scale = 0.965 + progress * 0.035;
         item.style.opacity = String(.28 + progress * .72);
         item.style.transform = `translate3d(0, ${offset.toFixed(1)}px, 0) scale(${scale.toFixed(3)})`;
+      }
+      if (stepsTrack) {
+        const rect = stepsTrack.getBoundingClientRect();
+        const travel = Math.max(1, Math.min(vh, rect.height));
+        const progress = clamp01((vh - rect.bottom) / travel);
+        stepsTrack.style.setProperty('--steps-progress', progress.toFixed(3));
       }
       const art = document.querySelector('.hero-art');
       if (art) {
