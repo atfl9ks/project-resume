@@ -8,12 +8,32 @@ from django.core.management.base import BaseCommand, CommandError
 
 
 class Command(BaseCommand):
-    help = "Checks Gmail SMTP authentication and sends a real test message."
+    help = "Sends a real test email through the configured email provider."
 
     def add_arguments(self, parser):
         parser.add_argument("recipient", help="Email address that will receive the test message")
 
     def handle(self, *args, **options):
+        if settings.EMAIL_BACKEND == "accounts.email_backends.BrevoEmailBackend":
+            if not settings.DEFAULT_FROM_EMAIL or settings.DEFAULT_FROM_EMAIL == "no-reply@rezume.ua":
+                raise CommandError("Укажите подтверждённый адрес отправителя в DEFAULT_FROM_EMAIL.")
+            self.stdout.write("Отправляю тестовое письмо через Brevo HTTPS API; API-ключ скрыт.")
+            message = EmailMultiAlternatives(
+                subject="Тест отправки — Резюме",
+                body="Это тестовое письмо. Brevo API принял сообщение.",
+                from_email=settings.DEFAULT_FROM_EMAIL,
+                to=[options["recipient"]],
+            )
+            message.attach_alternative("<p>Это тестовое письмо. Brevo API принял сообщение.</p>", "text/html")
+            try:
+                sent = message.send(fail_silently=False)
+            except Exception as exc:
+                raise CommandError(f"Brevo не отправил письмо: {exc}") from None
+            if sent != 1:
+                raise CommandError("Brevo не подтвердил отправку тестового письма.")
+            self.stdout.write(self.style.SUCCESS(f"Brevo API принял письмо для {options['recipient']}. Проверьте входящие и папку «Спам»."))
+            return
+
         required = {
             "EMAIL_HOST_USER": settings.EMAIL_HOST_USER,
             "EMAIL_HOST_PASSWORD": settings.EMAIL_HOST_PASSWORD,

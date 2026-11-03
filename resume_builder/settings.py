@@ -95,7 +95,12 @@ STORAGES = {
 MEDIA_URL = "/media/"
 _media_root = os.getenv("MEDIA_ROOT") or os.getenv("RAILWAY_VOLUME_MOUNT_PATH")
 MEDIA_ROOT = Path(_media_root or BASE_DIR / "media")
-EMAIL_BACKEND = os.getenv("EMAIL_BACKEND", "django.core.mail.backends.smtp.EmailBackend")
+EMAIL_PROVIDER = os.getenv("EMAIL_PROVIDER", "smtp").strip().lower()
+EMAIL_BACKEND = (
+    "accounts.email_backends.BrevoEmailBackend"
+    if EMAIL_PROVIDER == "brevo"
+    else os.getenv("EMAIL_BACKEND", "django.core.mail.backends.smtp.EmailBackend")
+)
 if not DEBUG and EMAIL_BACKEND == "django.core.mail.backends.console.EmailBackend":
     raise RuntimeError("The console email backend is disabled in production. Configure an SMTP backend.")
 EMAIL_HOST = os.getenv("EMAIL_HOST", "smtp.gmail.com")
